@@ -97,9 +97,6 @@ class Pawn:
     def getColor(self):
         return self.color
 
-    def getRadius(self):
-        return self.radius
-
     def getCanvas(self):
         return self.canvas
 
