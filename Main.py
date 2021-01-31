@@ -1,27 +1,16 @@
-from tkinter import *
 from Game import Game
+import pygame
 
-if __name__ == "__main__":
-    HEIGHT = 800
-    WIDTH = 800
-    window = Tk()
-    canvas = Canvas(window, height=HEIGHT, width=WIDTH)
-    window.geometry(f"{str(HEIGHT)}x{str(WIDTH)}")
-    window.title("Checkers")
-    icon = PhotoImage(file='chess-board.png')
-    window.iconphoto(True, icon)
+HEIGHT = 800
+WIDTH = 800
 
-    game = Game(window, canvas)
-    game.mainLoop()
+pygame.init()
 
-    window.mainloop()
+window = pygame.display.set_mode((HEIGHT, WIDTH))
+pygame.display.set_caption("Checkers")
+icon = pygame.image.load('chess-board.png')
+pygame.display.set_icon(icon)
 
+game = Game(window)
+game.mainLoop()
 
-
-
-
-
-#print(board.getMatrix())
-
-# redPawnList = PawnList("red", 30, canvas, window)
-# bluePawnList = PawnList("blue", 30, canvas, window)

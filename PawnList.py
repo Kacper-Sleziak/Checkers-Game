@@ -1,17 +1,16 @@
-from Pawn import *
+from Pawn import Pawn
 
 
 class PawnList:
-    def __init__(self, color, radius, canvas, window):
+    def __init__(self, color, radius, window):
         self.radius = radius
-        self.canvas = canvas
         self.window = window
         self.color = color
         self.list = []
 
     def createPawnToList(self, cordinateX, cordinateY):
         self.list.append(
-            Pawn(cordinateX, cordinateY, self.getRadius(), self.getColor(), self.getCanvas(), self.getWindow()))
+            Pawn(cordinateX, cordinateY, self.getRadius(), (self.getColor()), self.getWindow()))
 
     def getColor(self):
         return self.color
@@ -27,9 +26,6 @@ class PawnList:
 
     def getRadius(self):
         return self.radius
-
-    def getCanvas(self):
-        return self.canvas
 
     def getWindow(self):
         return self.window

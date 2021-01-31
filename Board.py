@@ -1,3 +1,6 @@
+import pygame
+
+
 class Board:
 
     def __init__(self):
@@ -5,7 +8,7 @@ class Board:
         self.matrix = []
         self.rectanglesCoordinatesList = []
 
-    def draw(self, window, canvas):
+    def draw(self, window):
 
         rows = 8
 
@@ -25,9 +28,9 @@ class Board:
                 firstRectangle = 100  # When board row is starting with white rectangle
 
             for coordinateX in range(firstRectangle, lastRectangle, jump):
-                canvas.create_rectangle(coordinateX, coordinateY, coordinateX + self.getSize(),
-                                        coordinateY + self.getSize(),
-                                        fill="black", outline="#242424")
+
+                pygame.draw.rect(window, (0, 0, 0), ((coordinateX, coordinateY), (self.getSize(), self.getSize())))
+
                 middleCoordinates = [coordinateX + 50,
                                      coordinateY + 50]  # Saving coordinates of the middle of single rectangle
 
@@ -37,7 +40,6 @@ class Board:
                 rowIndex += 1
 
             self.matrix.append(row)  # Adding 4 items row to matrix
-        canvas.pack()
 
     def getSize(self):
         return self.size
@@ -47,3 +49,4 @@ class Board:
 
     def getList(self):
         return self.rectanglesCoordinatesList
+
