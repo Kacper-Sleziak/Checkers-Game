@@ -1,21 +1,21 @@
 import pygame
+from Parent import Parent
 
 
-class Pawn:
+class Pawn(Parent):
 
     def __init__(self, coordinateX, coordinateY, radius, color, window):
+        super().__init__()
         self.coordinateX = coordinateX
         self.coordinateY = coordinateY
         self.radius = radius
         self.window = window
         self.color = color
-        self.drawing = self.draw()
         self.alive = True
         self.radius = radius
 
-
     def draw(self):
-        r, g, b = self.color #Unpacking color tuple
+        r, g, b = self.color  # Unpacking color tuple
         return pygame.draw.circle(self.getWindow(), (r, g, b),
                                   (self.getCordinateX(), self.getCordinateY()), self.getRadius())
 
@@ -38,14 +38,18 @@ class Pawn:
         print("True")
         return True
 
+    def movePawn(self, newPosX, newPosY, rectangleMatrix, pawnList, listOfThisPawn):
+
+        newPosX, newPosY = self.centerCoordinates(newPosX, newPosY, rectangleMatrix)
+        if self.isMovePossible(pawnList, listOfThisPawn, newPosX, newPosY):
+            self.setCordinateX(newPosX)
+            self.setCordinateY(newPosY)
+
     def pawnDestroy(self):
         self.alive = False
 
     def getCordinateX(self):
         return self.coordinateX
-
-    def setCordinateX(self, newCoordinateX):
-        self.coordinateX = newCoordinateX
 
     def getCordinateY(self):
         return self.coordinateY
@@ -59,9 +63,11 @@ class Pawn:
     def getWindow(self):
         return self.window
 
-
     def setCordinateY(self, newCoordinateY):
         self.coordinateY = newCoordinateY
+
+    def setCordinateX(self, newCoordinateX):
+        self.coordinateX = newCoordinateX
 
     # def movePawn(self, newPosX, newPosY):
     #

@@ -14,3 +14,4 @@ pygame.display.set_icon(icon)
 game = Game(window)
 game.mainLoop()
 
+

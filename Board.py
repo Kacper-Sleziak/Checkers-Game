@@ -5,11 +5,11 @@ class Board:
 
     def __init__(self):
         self.size = 100  # size mean height and width of single black rectangle on the board
-        self.matrix = []
-        self.rectanglesCoordinatesList = []
+        self.matrix = self.createRecMatrix()
 
-    def draw(self, window):
+    def createRecMatrix(self):
 
+        matrix = []
         rows = 8
 
         for i in range(rows):
@@ -29,17 +29,16 @@ class Board:
 
             for coordinateX in range(firstRectangle, lastRectangle, jump):
 
-                pygame.draw.rect(window, (0, 0, 0), ((coordinateX, coordinateY), (self.getSize(), self.getSize())))
-
                 middleCoordinates = [coordinateX + 50,
                                      coordinateY + 50]  # Saving coordinates of the middle of single rectangle
 
-                self.rectanglesCoordinatesList.append(middleCoordinates)
                 row.append(middleCoordinates)
 
                 rowIndex += 1
 
-            self.matrix.append(row)  # Adding 4 items row to matrix
+            matrix.append(row)  # Adding 4 items row to matrix
+
+        return matrix
 
     def getSize(self):
         return self.size
