@@ -1,5 +1,6 @@
 import pygame
 
+
 class Drawings:
     def __init__(self, window):
         self.window = window
@@ -10,7 +11,6 @@ class Drawings:
         matrix = board.getMatrix()
         for row in matrix:
             for rectangle in row:
-
                 x, y = rectangle
                 coordinateX = x - 50
                 coordinateY = y - 50

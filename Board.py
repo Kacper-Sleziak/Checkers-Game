@@ -5,9 +5,9 @@ class Board:
 
     def __init__(self):
         self.size = 100  # size mean height and width of single black rectangle on the board
-        self.matrix = self.createRecMatrix()
+        self.matrix = self.__createRecMatrix()
 
-    def createRecMatrix(self):
+    def __createRecMatrix(self):
 
         matrix = []
         rows = 8

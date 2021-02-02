@@ -1,11 +1,13 @@
 from abc import ABC
 
-class Parent(ABC):
+
+class GlobalFunctionality(ABC):
 
     def __init__(self):
         pass
 
-    def centerCoordinates(self, posX, posY, rectangleMatrix):
+    @staticmethod
+    def centerCoordinates(posX, posY, rectangleMatrix):
 
         for row in rectangleMatrix:
             for rectangle in row:

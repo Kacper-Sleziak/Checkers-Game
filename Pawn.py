@@ -1,8 +1,8 @@
 import pygame
-from Parent import Parent
+from GlobalFunctionality import GlobalFunctionality
 
 
-class Pawn(Parent):
+class Pawn(GlobalFunctionality):
 
     def __init__(self, coordinateX, coordinateY, radius, color, window):
         super().__init__()
@@ -23,19 +23,15 @@ class Pawn(Parent):
 
         for pawn in pawnList.getList():
             if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordSy):
-                print("False")
                 return False
 
         for pawn in listOfThisPawn.getList():
             if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordSy) and pawn != self:
-                print("False")
                 return False
 
         if (self.getCordinateX() == moveCordsX) and (self.getCordinateY() == moveCordSy):
-            print("You are here fool!")
             return False
 
-        print("True")
         return True
 
     def movePawn(self, newPosX, newPosY, rectangleMatrix, pawnList, listOfThisPawn):
