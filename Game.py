@@ -54,7 +54,9 @@ class Game(GlobalFunctionality):
 
                     elif isPawnChoosed:
                         print("Pawn is moving1")
-                        isPawnChoosed = self.roundMovingPawn(otherPawnList, thisPawnList, mouseXPos, mouseYPos)
+                        listOfMoves = self.getListOfPossibleMoves(self.choosenPawnX, self.choosenPawnY, self.round, self.getRedPawnList(), self.getBluePawnList())
+
+                        isPawnChoosed = self.roundMovingPawn(thisPawnList, mouseXPos, mouseYPos, listOfMoves)
                         print(f"Pawn is moving2,{isPawnChoosed}")
                         if not isPawnChoosed:
                             if self.round == "red":
@@ -84,15 +86,67 @@ class Game(GlobalFunctionality):
 
         return False
 
-    def roundMovingPawn(self, otherPawnList, thisPawnList, mouseXPos, mouseYPos):
-
+    def roundMovingPawn(self, thisPawnList, mouseXPos, mouseYPos, listOfMoves):
         for pawn in thisPawnList.getList():
             if pawn.getCordinateX() == self.getChoosenPawnX() and pawn.getCordinateY() == self.getChoosenPawnY():
-                if pawn.isMovePossible(otherPawnList, thisPawnList, mouseXPos, mouseYPos):
-                    pawn.setCordinateX(mouseXPos)
-                    pawn.setCordinateY(mouseYPos)
-                    return False
+                for move in listOfMoves:
+                    x, y = move
+                    print(f"{x}, {y}")
+                    print(f"mouse {mouseXPos}, {mouseYPos}")
+                    if x == mouseXPos and y == mouseYPos:
+                        pawn.setCordinateX(mouseXPos)
+                        pawn.setCordinateY(mouseYPos)
+                        return False
         return True
+
+    def getListOfPossibleMoves(self, pawnX, pawnY, color, redPawnList, bluePawnList):
+
+        listOfPossibleMoves = []
+        leftRectangleCords = (0, 0)
+        rightRectangleCords = (0, 0)
+        pawnList = bluePawnList
+        listOfThisPawn = redPawnList
+
+        if color == "red":
+            leftRectangleCords = (pawnX + 100, pawnY + 100)
+            rightRectangleCords = (pawnX - 100, pawnY + 100)
+            pawnList = bluePawnList
+            listOfThisPawn = redPawnList
+
+        elif color == "blue":
+            leftRectangleCords = (pawnX + 100, pawnY - 100)
+            rightRectangleCords = (pawnX - 100, pawnY - 100)
+            pawnList = redPawnList
+            listOfThisPawn = bluePawnList
+
+        listOfPossibleMoves.append(leftRectangleCords)
+        listOfPossibleMoves.append(rightRectangleCords)
+
+        for rectangle in listOfPossibleMoves:
+            moveCordsX, moveCordsY = rectangle
+            if not self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+                listOfPossibleMoves.remove(rectangle)
+                #rectangleToCheckX
+        return listOfPossibleMoves
+
+    def appendListOfPossiblesBeatings(self, listOfPossibleMoves, choosenPawnX, choosenPawnY, redPawnList, bluePawnList, color):
+
+        leftRectangleCords = (0, 0)
+        rightRectangleCords = (0, 0)
+        pawnList = bluePawnList
+        listOfThisPawn = redPawnList
+
+        if color == "red":
+            pawnList = bluePawnList
+            listOfThisPawn = redPawnList
+
+        elif color == "blue":
+            pawnList = redPawnList
+            listOfThisPawn = bluePawnList
+                
+        # if jeśli nie dodalismy to zwracamy getListOfPossibleMoves
+        #
+        # else jesli dodalismy to zwracamy funkcje appendListOfPossiblesBeatings z nowymi polozeniami
 
     def gameUpdate(self):
         pass

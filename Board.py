@@ -46,6 +46,4 @@ class Board:
     def getMatrix(self):
         return self.matrix
 
-    def getList(self):
-        return self.rectanglesCoordinatesList
 

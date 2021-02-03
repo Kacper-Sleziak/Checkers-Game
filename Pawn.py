@@ -19,20 +19,6 @@ class Pawn(GlobalFunctionality):
         return pygame.draw.circle(self.getWindow(), (r, g, b),
                                   (self.getCordinateX(), self.getCordinateY()), self.getRadius())
 
-    def isMovePossible(self, pawnList, listOfThisPawn, moveCordsX, moveCordSy):
-
-        for pawn in pawnList.getList():
-            if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordSy):
-                return False
-
-        for pawn in listOfThisPawn.getList():
-            if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordSy) and pawn != self:
-                return False
-
-        if (self.getCordinateX() == moveCordsX) and (self.getCordinateY() == moveCordSy):
-            return False
-
-        return True
 
     def movePawn(self, newPosX, newPosY, rectangleMatrix, pawnList, listOfThisPawn):
 

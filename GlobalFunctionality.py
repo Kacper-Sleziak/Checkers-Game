@@ -17,3 +17,22 @@ class GlobalFunctionality(ABC):
                     centerPosY = recMidY
                     return centerPosX, centerPosY
         return posX, posY
+
+    def isMovePossible(self, pawnList, listOfThisPawn, rectangleMatrix, moveCordsX, moveCordsY):
+
+        for row in rectangleMatrix:
+            for rectangle in row:
+                rectangleX, rectangleY = rectangle
+
+                if rectangleX == moveCordsX and rectangleY == moveCordsY:
+
+                    for pawn in pawnList.getList():
+                        if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordsY):
+                            return False
+
+                    for pawn in listOfThisPawn.getList():
+                        if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordsY) and pawn != self:
+                            return False
+
+                    return True
+        return False
