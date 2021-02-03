@@ -150,22 +150,33 @@ class Game(GlobalFunctionality):
             listOfThisPawn = bluePawnList
             direction = -1
 
+        moveCordsX = choosenPawnX +  direction * 100
+        moveCordsY = choosenPawnY +  direction * 100
 
-        for i in range(7):
-            moveCordsX = choosenPawnX + i * direction * 100
-            moveCordsY = choosenPawnY + i * direction * 100
+        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+            listOfPossibleMoves.append((moveCordsX, moveCordsY))
+            self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
 
-            if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
-                listOfPossibleMoves.append((moveCordsX, moveCordsY))
+        moveCordsX = choosenPawnX +  direction * -100
+        moveCordsY = choosenPawnY +  direction * 100
 
-            moveCordsX = choosenPawnX + i * direction * -100
+        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+            listOfPossibleMoves.append((moveCordsX, moveCordsY))
+            self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
 
-            if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
-                listOfPossibleMoves.append((moveCordsX, moveCordsY))
-
-        # if jeśli nie dodalismy to zwracamy getListOfPossibleMoves
+        # for i in range(7):
+        #     moveCordsX = choosenPawnX + i * direction * 100
+        #     moveCordsY = choosenPawnY + i * direction * 100
         #
-        # else jesli dodalismy to zwracamy funkcje appendListOfPossiblesBeatings z nowymi polozeniami
+        #     if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+        #         listOfPossibleMoves.append((moveCordsX, moveCordsY))
+        #
+        #     moveCordsX = choosenPawnX + i * direction * -100
+        #
+        #     if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+        #         listOfPossibleMoves.append((moveCordsX, moveCordsY))
+
+
         return listOfPossibleMoves
 
     def gameUpdate(self):
