@@ -18,12 +18,14 @@ class Game(GlobalFunctionality):
 
     def mainLoop(self):
 
+        priorityPawns = []
         running = True
         isPawnChoosed = False  # about mouse click
         redPlayer = Player((255, 0, 0))
         bluePlayer = Player((0, 0, 255))
 
         thisPawnList = redPlayer.getPawnList()
+        otherPawnList = bluePlayer.getPawnList()
 
         while running:
             for event in pygame.event.get():
@@ -31,12 +33,14 @@ class Game(GlobalFunctionality):
                 if event.type == pygame.QUIT:
                     running = False
 
+                priorityPawns = self.searchingPriorityPawns(thisPawnList, otherPawnList)
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouseXPos, mouseYPos = pygame.mouse.get_pos()
                     mouseXPos, mouseYPos = self.centerCoordinates(mouseXPos, mouseYPos, self.board.getMatrix())
 
                     if not isPawnChoosed:
-                        isPawnChoosed = self.roundChosingPawn(thisPawnList, mouseXPos, mouseYPos)
+                        isPawnChoosed = self.roundChosingPawn(thisPawnList, mouseXPos, mouseYPos, priorityPawns)
                         if isPawnChoosed:
                             self.listOfMoves = self.getListOfMoves(self.choosenPawnX, self.choosenPawnY, self.round, redPlayer.getPawnList(), bluePlayer.getPawnList())
                             self.listOfMoves = self.appendListOfPossiblesBeatings(self.listOfMoves, self.choosenPawnX, self.choosenPawnY, redPlayer.getPawnList(), bluePlayer.getPawnList(), self.round)
@@ -60,16 +64,24 @@ class Game(GlobalFunctionality):
                                 print(self.getRound())
 
                         self.listOfMoves.clear()
+                        priorityPawns.clear()
 
             self.gameUpdate(redPlayer, bluePlayer)
 
-    def roundChosingPawn(self, pawnList, mouseXPos, mouseYPos):
+    def roundChosingPawn(self, pawnList, mouseXPos, mouseYPos, priorityPawns):
 
-        for pawn in pawnList:
-            if pawn.getCordinateX() == mouseXPos and pawn.getCordinateY() == mouseYPos:
-                self.setChoosenPawnX(pawn.getCordinateX())
-                self.setChoosenPawnY(pawn.getCordinateY())
-                return True
+        if priorityPawns == []:
+            for pawn in pawnList:
+                if pawn.getCordinateX() == mouseXPos and pawn.getCordinateY() == mouseYPos:
+                    self.setChoosenPawnX(pawn.getCordinateX())
+                    self.setChoosenPawnY(pawn.getCordinateY())
+                    return True
+        else:
+            for pawn in priorityPawns:
+                if pawn.getCordinateX() == mouseXPos and pawn.getCordinateY() == mouseYPos:
+                    self.setChoosenPawnX(pawn.getCordinateX())
+                    self.setChoosenPawnY(pawn.getCordinateY())
+                    return True
 
         return False
 
@@ -188,6 +200,35 @@ class Game(GlobalFunctionality):
         drawings.drawPawns(bluePlayer.getPawnList())
         drawings.drawPosibleMoves(self.window, self.listOfMoves)
         pygame.display.update()
+
+    def searchingPriorityPawns(self, listOfThisPawn, pawnList):
+        priorityPawns = []
+
+        for pawn in listOfThisPawn:
+            x = pawn.getCordinateX()
+            y = pawn.getCordinateY()
+            nearRectangles = []
+
+            nearRectangle1 = (x + 100, y - 100)
+            nearRectangle2 = (x + 100, y + 100)
+            nearRectangle3 = (x - 100, y + 100)
+            nearRectangle4 = (x - 100, y + 100)
+
+            nearRectangles.append(nearRectangle1)
+            nearRectangles.append(nearRectangle2)
+            nearRectangles.append(nearRectangle3)
+            nearRectangles.append(nearRectangle4)
+
+            for nearRectangle in nearRectangles:
+                nearX, nearY = nearRectangle
+                for row in self.board.getMatrix():
+                    for rectangle in row:
+                        recX, recY = rectangle
+                        if nearX == recX and nearY == recY:
+                            for enemyPawn in pawnList:
+                                if nearX == enemyPawn.getCordinateX() and nearY == enemyPawn.getCordinateY():
+                                    priorityPawns.append(pawn)
+        return priorityPawns
 
     def getWindow(self):
         return self.window
