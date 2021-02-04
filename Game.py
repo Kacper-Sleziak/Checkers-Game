@@ -34,7 +34,12 @@ class Game(GlobalFunctionality):
                     running = False
 
                 priorityPawns = self.searchingPriorityPawns(thisPawnList, otherPawnList)
-
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        isPawnChoosed = False
+                        self.listOfMoves.clear()
+                        self.gameUpdate(redPlayer, bluePlayer)
+                        print("escape")
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouseXPos, mouseYPos = pygame.mouse.get_pos()
                     mouseXPos, mouseYPos = self.centerCoordinates(mouseXPos, mouseYPos, self.board.getMatrix())
@@ -43,7 +48,7 @@ class Game(GlobalFunctionality):
                         isPawnChoosed = self.roundChosingPawn(thisPawnList, mouseXPos, mouseYPos, priorityPawns)
                         if isPawnChoosed:
                             self.listOfMoves = self.getListOfMoves(self.choosenPawnX, self.choosenPawnY, self.round, redPlayer.getPawnList(), bluePlayer.getPawnList())
-                            self.listOfMoves = self.appendListOfPossiblesBeatings(self.listOfMoves, self.choosenPawnX, self.choosenPawnY, redPlayer.getPawnList(), bluePlayer.getPawnList(), self.round)
+                            self.listOfMoves = self.appendListOfPossiblesBeatings(self.listOfMoves, self.choosenPawnX, self.choosenPawnY, redPlayer.getPawnList(), bluePlayer.getPawnList(), self.round, 0)
                             print("posible moves")
                             print(self.listOfMoves)
 
@@ -63,8 +68,8 @@ class Game(GlobalFunctionality):
                                 thisPawnList = redPlayer.getPawnList()
                                 print(self.getRound())
 
-                        self.listOfMoves.clear()
-                        priorityPawns.clear()
+                            self.listOfMoves.clear()
+                            priorityPawns.clear()
 
             self.gameUpdate(redPlayer, bluePlayer)
 
@@ -127,52 +132,83 @@ class Game(GlobalFunctionality):
                 #rectangleToCheckX
         return listOfPossibleMoves
 
-    def appendListOfPossiblesBeatings(self, listOfPossibleMoves, choosenPawnX, choosenPawnY, redPawnList, bluePawnList, round):
+    def isEnemyNear(self, x, y, listOfEnemyPawns):
+        for pawn in listOfEnemyPawns:
+            if pawn.getCordinateX() == (x + 100) and pawn.getCordinateY() == (y + 100):
+                return (1,1)
+            if pawn.getCordinateX() == (x + 100) and pawn.getCordinateY() == (y - 100):
+                return (1,-1)
+            if pawn.getCordinateX() == (x - 100) and pawn.getCordinateY() == (y + 100):
+                return (-1,1)
+            if pawn.getCordinateX() == (x - 100) and pawn.getCordinateY() == (y - 100):
+                return (-1,-1)
+
+
+    def appendListOfPossiblesBeatings(self, listOfPossibleMoves, choosenPawnX, choosenPawnY, redPawnList, bluePawnList, round, counter):
 
         leftRectangleCords = (0, 0)
         rightRectangleCords = (0, 0)
         pawnList = bluePawnList
         listOfThisPawn = redPawnList
-        direction = 0
+
 
         if round == "red":
             pawnList = bluePawnList
             listOfThisPawn = redPawnList
-            direction = 1
+
 
         elif round == "blue":
             pawnList = redPawnList
             listOfThisPawn = bluePawnList
-            direction = - 1
 
-        moveCordsX = choosenPawnX +  200
-        moveCordsY = choosenPawnY +  (200 * direction)
+        def recurency(xDirection, yDirection):
+
+            nonlocal counter
+            moveCordsX = choosenPawnX +  200 * xDirection
+            moveCordsY = choosenPawnY +  200 * yDirection
+
+            if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and counter  < 5 and \
+            self.isEnemyNear(choosenPawnX, choosenPawnY, pawnList) == (xDirection, yDirection):
+
+                counter = counter + 1
+                listOfPossibleMoves.append((moveCordsX, moveCordsY))
+                self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round, counter)
 
 
-        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
-            listOfPossibleMoves.append((moveCordsX, moveCordsY))
-            self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
-
-        moveCordsX = choosenPawnX -  200
-        moveCordsY = choosenPawnY +  (200 * direction)
-
-        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY)and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
-            listOfPossibleMoves.append((moveCordsX, moveCordsY))
-            self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
-
-        # moveCordsX = choosenPawnX +  200
-        # moveCordsY = choosenPawnY -  (200 * direction)
+        recurency(1,1)
+        recurency(1,-1)
+        recurency(-1,1)
+        recurency(-1,-1)
+        # moveCordsX = choosenPawnX -  200
+        # moveCordsY = choosenPawnY +  200
         #
-        # if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY)and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
+        # if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and counter < 5 and \
+        # self.isEnemyNear(choosenPawnX, choosenPawnY, pawnList) == (-1,1):
+        #
+        #     counter = counter + 1
         #     listOfPossibleMoves.append((moveCordsX, moveCordsY))
-        #     self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
+        #     self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round, counter)
+        #
+        # moveCordsX = choosenPawnX +  200
+        # moveCordsY = choosenPawnY -  200
+        #
+        # if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and counter < 5 and \
+        # self.isEnemyNear(choosenPawnX, choosenPawnY, pawnList) == (1,-1):
+        #
+        #     counter = counter + 1
+        #     listOfPossibleMoves.append((moveCordsX, moveCordsY))
+        #     self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round, counter)
         #
         # moveCordsX = choosenPawnX -  200
-        # moveCordsY = choosenPawnY -  (200 * direction)
+        # moveCordsY = choosenPawnY -  200
         #
-        # if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY)and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
+        # if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and counter < 5 and \
+        # self.isEnemyNear(choosenPawnX, choosenPawnY, pawnList) == (-1,-1):
+        #
+        #     counter = counter + 1
         #     listOfPossibleMoves.append((moveCordsX, moveCordsY))
-        #     self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
+        #     self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round, counter)
+
 
 
 
