@@ -4,21 +4,13 @@ from GlobalFunctionality import GlobalFunctionality
 
 class Pawn(GlobalFunctionality):
 
-    def __init__(self, coordinateX, coordinateY, radius, color, window):
+    def __init__(self, coordinateX, coordinateY, color):
         super().__init__()
         self.coordinateX = coordinateX
         self.coordinateY = coordinateY
-        self.radius = radius
-        self.window = window
         self.color = color
         self.alive = True
-        self.radius = radius
-
-    def draw(self):
-        r, g, b = self.color  # Unpacking color tuple
-        return pygame.draw.circle(self.getWindow(), (r, g, b),
-                                  (self.getCordinateX(), self.getCordinateY()), self.getRadius())
-
+        self.radius = 30
 
     def movePawn(self, newPosX, newPosY, rectangleMatrix, pawnList, listOfThisPawn):
 
@@ -41,9 +33,6 @@ class Pawn(GlobalFunctionality):
 
     def getColor(self):
         return self.color
-
-    def getWindow(self):
-        return self.window
 
     def setCordinateY(self, newCoordinateY):
         self.coordinateY = newCoordinateY

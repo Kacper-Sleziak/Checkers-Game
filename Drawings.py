@@ -18,10 +18,13 @@ class Drawings:
                 pygame.draw.rect(self.window, (0, 0, 0), ((coordinateX, coordinateY), (self.recSize, self.recSize)))
 
     def drawPawns(self, pawnList):
-        for pawn in pawnList.getList():
-            pawn.draw()
+        for pawn in pawnList:
+            r, g, b = pawn.getColor()
+            pygame.draw.circle(self.window, (r, g, b),
+                               (pawn.getCordinateX(), pawn.getCordinateY()), pawn.getRadius())
+
 
     def drawPosibleMoves(self, window, listOfMoves):
         for move in listOfMoves:
-            x,y = move
+            x, y = move
             pygame.draw.circle(window, (200, 200, 0), (x, y), 50)

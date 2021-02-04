@@ -26,11 +26,11 @@ class GlobalFunctionality(ABC):
 
                 if rectangleX == moveCordsX and rectangleY == moveCordsY:
 
-                    for pawn in pawnList.getList():
+                    for pawn in pawnList:
                         if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordsY):
                             return False
 
-                    for pawn in listOfThisPawn.getList():
+                    for pawn in listOfThisPawn:
                         if (pawn.getCordinateX() == moveCordsX) and (pawn.getCordinateY() == moveCordsY) and pawn != self:
                             return False
 
