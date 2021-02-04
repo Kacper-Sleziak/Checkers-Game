@@ -20,3 +20,8 @@ class Drawings:
     def drawPawns(self, pawnList):
         for pawn in pawnList.getList():
             pawn.draw()
+
+    def drawPosibleMoves(self, window, listOfMoves):
+        for move in listOfMoves:
+            x,y = move
+            pygame.draw.circle(window, (200, 200, 0), (x, y), 50)

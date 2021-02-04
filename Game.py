@@ -17,6 +17,7 @@ class Game(GlobalFunctionality):
         self.board = Board()
         self.choosenPawnX = 0
         self.choosenPawnY = 0
+        self.listOfMoves = []
 
     def mainLoop(self):
 
@@ -40,6 +41,7 @@ class Game(GlobalFunctionality):
 
         while running:
             for event in pygame.event.get():
+
                 if event.type == pygame.QUIT:
                     running = False
 
@@ -49,17 +51,19 @@ class Game(GlobalFunctionality):
 
                     if not isPawnChoosed:
                         isPawnChoosed = self.roundChosingPawn(thisPawnList, mouseXPos, mouseYPos)
-                        print("Choosed Pawn cords:")
-                        print(f"{self.getChoosenPawnX()}, {self.getChoosenPawnY()}")
-                        listOfMoves = self.getListOfPossibleMoves(self.choosenPawnX, self.choosenPawnY, self.round, self.getRedPawnList(), self.getBluePawnList())
-                        listOfMoves = self.appendListOfPossiblesBeatings(listOfMoves, self.choosenPawnX, self.choosenPawnY, self.getRedPawnList(), self.getBluePawnList(), self.round)
-                        print("posible moves")
-                        print(listOfMoves)
+                        if isPawnChoosed:
+                            print("Choosed Pawn cords:")
+                            print(f"{self.getChoosenPawnX()}, {self.getChoosenPawnY()}")
+                            self.listOfMoves = self.getListOfPossibleMoves(self.choosenPawnX, self.choosenPawnY, self.round, self.getRedPawnList(), self.getBluePawnList())
+                            self.listOfMoves = self.appendListOfPossiblesBeatings(self.listOfMoves, self.choosenPawnX, self.choosenPawnY, self.getRedPawnList(), self.getBluePawnList(), self.round)
+                            print("posible moves")
+                            print(self.listOfMoves)
+
 
                     elif isPawnChoosed:
                         #listofmoves wrzuc do inita? tak samo otherPawnList i thisPawnList
 
-                        isPawnChoosed = self.roundMovingPawn(thisPawnList, mouseXPos, mouseYPos, listOfMoves)
+                        isPawnChoosed = self.roundMovingPawn(thisPawnList, mouseXPos, mouseYPos, self.listOfMoves)
                         print(f"Pawn is moving2,{isPawnChoosed}")
                         if not isPawnChoosed:
                             if self.round == "red":
@@ -73,11 +77,9 @@ class Game(GlobalFunctionality):
                                 thisPawnList = self.getRedPawnList()
                                 print(self.getRound())
 
-            self.window.fill((255, 255, 255))
-            drawings.drawBoard(board)
-            drawings.drawPawns(self.getRedPawnList())
-            drawings.drawPawns(self.getBluePawnList())
-            pygame.display.update()
+                        self.listOfMoves.clear()
+
+            self.gameUpdate()
 
     def roundChosingPawn(self, pawnList, mouseXPos, mouseYPos):
 
@@ -99,6 +101,7 @@ class Game(GlobalFunctionality):
                     if x == mouseXPos and y == mouseYPos:
                         pawn.setCordinateX(mouseXPos)
                         pawn.setCordinateY(mouseYPos)
+                        self.listOfMoves.clear
                         return False
         return True
 
@@ -138,31 +141,30 @@ class Game(GlobalFunctionality):
         rightRectangleCords = (0, 0)
         pawnList = bluePawnList
         listOfThisPawn = redPawnList
-        direction = 0
 
         if round == "red":
             pawnList = bluePawnList
             listOfThisPawn = redPawnList
-            direction = 1
 
         elif round == "blue":
             pawnList = redPawnList
             listOfThisPawn = bluePawnList
-            direction = -1
 
-        moveCordsX = choosenPawnX +  direction * 100
-        moveCordsY = choosenPawnY +  direction * 100
+        moveCordsX = choosenPawnX +  200
+        moveCordsY = choosenPawnY +  200
+
+        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+            listOfPossibleMoves.append((moveCordsX, moveCordsY))
+            self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
+
+        moveCordsX = choosenPawnX +  200
+        moveCordsY = choosenPawnY -  200
 
         if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
             listOfPossibleMoves.append((moveCordsX, moveCordsY))
             self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
 
-        moveCordsX = choosenPawnX +  direction * -100
-        moveCordsY = choosenPawnY +  direction * 100
 
-        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
-            listOfPossibleMoves.append((moveCordsX, moveCordsY))
-            self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
 
         # for i in range(7):
         #     moveCordsX = choosenPawnX + i * direction * 100
@@ -180,7 +182,14 @@ class Game(GlobalFunctionality):
         return listOfPossibleMoves
 
     def gameUpdate(self):
-        pass
+        drawings = Drawings(self.window)
+
+        self.window.fill((255, 255, 255))
+        drawings.drawBoard(self.board)
+        drawings.drawPawns(self.getRedPawnList())
+        drawings.drawPawns(self.getBluePawnList())
+        drawings.drawPosibleMoves(self.window, self.listOfMoves)
+        pygame.display.update()
 
     def getWindow(self):
         return self.window
