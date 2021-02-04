@@ -23,7 +23,6 @@ class Drawings:
             pygame.draw.circle(self.window, (r, g, b),
                                (pawn.getCordinateX(), pawn.getCordinateY()), pawn.getRadius())
 
-
     def drawPosibleMoves(self, window, listOfMoves):
         for move in listOfMoves:
             x, y = move
