@@ -162,12 +162,11 @@ class Game(GlobalFunctionality):
             listOfThisPawn = bluePawnList
 
         def recurency(xDirection, yDirection):
-
             nonlocal counter
             moveCordsX = choosenPawnX +  200 * xDirection
             moveCordsY = choosenPawnY +  200 * yDirection
 
-            if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and counter  < 5 and \
+            if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and counter  < 7 and \
             self.isEnemyNear(choosenPawnX, choosenPawnY, pawnList) == (xDirection, yDirection):
 
                 counter = counter + 1

@@ -15,9 +15,9 @@ class Player:
 
         if self.__color == (255, 0, 0):
             pawnList.append(self.__createPawn(50, 50))
-            pawnList.append(self.__createPawn(250, 50))
-            pawnList.append(self.__createPawn(450, 50))
-            pawnList.append(self.__createPawn(650, 50))
+            pawnList.append(self.__createPawn(250, 250))
+            pawnList.append(self.__createPawn(250, 450))
+            pawnList.append(self.__createPawn(150, 550))
 
         elif self.__color == (0, 0, 255):
             pawnList.append(self.__createPawn(150, 750))
