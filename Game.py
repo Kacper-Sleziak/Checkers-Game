@@ -45,8 +45,6 @@ class Game(GlobalFunctionality):
 
 
                     elif isPawnChoosed:
-                        #listofmoves wrzuc do inita? tak samo otherPawnList i thisPawnList
-
                         isPawnChoosed = self.roundMovingPawn(thisPawnList, mouseXPos, mouseYPos, self.listOfMoves)
 
                         if not isPawnChoosed:
@@ -123,28 +121,46 @@ class Game(GlobalFunctionality):
         rightRectangleCords = (0, 0)
         pawnList = bluePawnList
         listOfThisPawn = redPawnList
+        direction = 0
 
         if round == "red":
             pawnList = bluePawnList
             listOfThisPawn = redPawnList
+            direction = 1
 
         elif round == "blue":
             pawnList = redPawnList
             listOfThisPawn = bluePawnList
+            direction = - 1
 
         moveCordsX = choosenPawnX +  200
-        moveCordsY = choosenPawnY +  200
+        moveCordsY = choosenPawnY +  (200 * direction)
 
-        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+
+        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY) and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
             listOfPossibleMoves.append((moveCordsX, moveCordsY))
             self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
 
-        moveCordsX = choosenPawnX +  200
-        moveCordsY = choosenPawnY -  200
+        moveCordsX = choosenPawnX -  200
+        moveCordsY = choosenPawnY +  (200 * direction)
 
-        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY):
+        if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY)and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
             listOfPossibleMoves.append((moveCordsX, moveCordsY))
             self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
+
+        # moveCordsX = choosenPawnX +  200
+        # moveCordsY = choosenPawnY -  (200 * direction)
+        #
+        # if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY)and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
+        #     listOfPossibleMoves.append((moveCordsX, moveCordsY))
+        #     self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
+        #
+        # moveCordsX = choosenPawnX -  200
+        # moveCordsY = choosenPawnY -  (200 * direction)
+        #
+        # if self.isMovePossible(pawnList, listOfThisPawn, self.board.getMatrix(), moveCordsX, moveCordsY)and (moveCordsX != choosenPawnX and moveCordsY != choosenPawnY):
+        #     listOfPossibleMoves.append((moveCordsX, moveCordsY))
+        #     self.appendListOfPossiblesBeatings(listOfPossibleMoves, moveCordsX, moveCordsY, redPawnList, bluePawnList, round)
 
 
 
@@ -193,4 +209,3 @@ class Game(GlobalFunctionality):
 
     def setRound(self, newRound):
         self.round = newRound
-
