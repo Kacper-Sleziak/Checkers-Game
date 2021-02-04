@@ -52,9 +52,7 @@ class Game(GlobalFunctionality):
                     if not isPawnChoosed:
                         isPawnChoosed = self.roundChosingPawn(thisPawnList, mouseXPos, mouseYPos)
                         if isPawnChoosed:
-                            print("Choosed Pawn cords:")
-                            print(f"{self.getChoosenPawnX()}, {self.getChoosenPawnY()}")
-                            self.listOfMoves = self.getListOfPossibleMoves(self.choosenPawnX, self.choosenPawnY, self.round, self.getRedPawnList(), self.getBluePawnList())
+                            self.listOfMoves = self.getListOfMoves(self.choosenPawnX, self.choosenPawnY, self.round, self.getRedPawnList(), self.getBluePawnList())
                             self.listOfMoves = self.appendListOfPossiblesBeatings(self.listOfMoves, self.choosenPawnX, self.choosenPawnY, self.getRedPawnList(), self.getBluePawnList(), self.round)
                             print("posible moves")
                             print(self.listOfMoves)
@@ -64,7 +62,7 @@ class Game(GlobalFunctionality):
                         #listofmoves wrzuc do inita? tak samo otherPawnList i thisPawnList
 
                         isPawnChoosed = self.roundMovingPawn(thisPawnList, mouseXPos, mouseYPos, self.listOfMoves)
-                        print(f"Pawn is moving2,{isPawnChoosed}")
+
                         if not isPawnChoosed:
                             if self.round == "red":
                                 self.setRound("blue")
@@ -96,8 +94,6 @@ class Game(GlobalFunctionality):
             if pawn.getCordinateX() == self.getChoosenPawnX() and pawn.getCordinateY() == self.getChoosenPawnY():
                 for move in listOfMoves:
                     x, y = move
-                    print(f"{x}, {y}")
-                    print(f"mouse {mouseXPos}, {mouseYPos}")
                     if x == mouseXPos and y == mouseYPos:
                         pawn.setCordinateX(mouseXPos)
                         pawn.setCordinateY(mouseYPos)
@@ -105,7 +101,7 @@ class Game(GlobalFunctionality):
                         return False
         return True
 
-    def getListOfPossibleMoves(self, pawnX, pawnY, color, redPawnList, bluePawnList):
+    def getListOfMoves(self, pawnX, pawnY, color, redPawnList, bluePawnList):
 
         listOfPossibleMoves = []
         leftRectangleCords = (0, 0)
@@ -231,3 +227,4 @@ class Game(GlobalFunctionality):
 
     def setRound(self, newRound):
         self.round = newRound
+
