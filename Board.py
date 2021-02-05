@@ -45,5 +45,3 @@ class Board:
 
     def getMatrix(self):
         return self.matrix
-
-

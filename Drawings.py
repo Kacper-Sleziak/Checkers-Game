@@ -2,6 +2,7 @@ import pygame
 
 
 class Drawings:
+    
     def __init__(self, window):
         self.window = window
         self.recSize = 100
