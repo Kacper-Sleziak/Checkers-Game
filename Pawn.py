@@ -12,12 +12,12 @@ class Pawn(GlobalFunctionality):
         self.alive = True
         self.radius = 30
 
-    def movePawn(self, newPosX, newPosY, rectangleMatrix, pawnList, listOfThisPawn):
-
-        newPosX, newPosY = self.centerCoordinates(newPosX, newPosY, rectangleMatrix)
-        if self.isMovePossible(pawnList, listOfThisPawn, newPosX, newPosY):
-            self.setCordinateX(newPosX)
-            self.setCordinateY(newPosY)
+    # def movePawn(self, newPosX, newPosY, rectangleMatrix, pawnList, listOfThisPawn):
+    #
+    #     newPosX, newPosY = self.centerCoordinates(newPosX, newPosY, rectangleMatrix)
+    #     if self.isMovePossible(pawnList, listOfThisPawn, newPosX, newPosY):
+    #         self.setCordinateX(newPosX)
+    #         self.setCordinateY(newPosY)
 
     def pawnDestroy(self):
         self.alive = False

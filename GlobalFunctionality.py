@@ -1,6 +1,5 @@
 from abc import ABC
 
-
 class GlobalFunctionality(ABC):
 
     def __init__(self):
@@ -36,3 +35,15 @@ class GlobalFunctionality(ABC):
 
                     return True
         return False
+
+    def isRectangleEmpty(self, x, y, pawnList, enemyPawnList):
+
+        for pawn in pawnList:
+            if pawn.getCordinateX() == x and pawn.getCordinateY() == y:
+                return False
+
+        for pawn in enemyPawnList:
+            if pawn.getCordinateX() == x and pawn.getCordinateY() == y:
+                return False
+
+        return True
