@@ -12,6 +12,7 @@ class Pawn(GlobalFunctionality):
         self.alive = True
         self.radius = 30
 
+    # usun ta funkcje
     def pawnDestroy(self):
         self.alive = False
 
