@@ -47,3 +47,13 @@ class GlobalFunctionality(ABC):
                 return False
 
         return True
+
+    def isEnemyThere(self, x, y, enemyPawnList):
+
+        for pawn in enemyPawnList:
+            pawnX = pawn.getCordinateX()
+            pawnY = pawn.getCordinateY()
+            if pawnX == x and pawnY == y:
+                return True
+
+        return False

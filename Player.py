@@ -3,7 +3,7 @@ from GlobalFunctionality import GlobalFunctionality
 
 
 class Player(GlobalFunctionality):
-    
+
     def __init__(self, color):
         self.__color = color
         self.pawnList = self.__createPawnList()
@@ -17,9 +17,9 @@ class Player(GlobalFunctionality):
 
         if self.__color == (255, 0, 0):
             pawnList.append(self.__createPawn(50, 50))
-            pawnList.append(self.__createPawn(250, 250))
-            pawnList.append(self.__createPawn(250, 450))
-            pawnList.append(self.__createPawn(150, 550))
+            pawnList.append(self.__createPawn(250, 50))
+            pawnList.append(self.__createPawn(450, 450))
+            pawnList.append(self.__createPawn(450, 650))
 
         elif self.__color == (0, 0, 255):
             pawnList.append(self.__createPawn(150, 750))
@@ -114,7 +114,6 @@ class Player(GlobalFunctionality):
 
         listOfBeatings = []
         listOfNearEnemyPawns = self.isEnemyNear(choosenPawnX, choosenPawnY, listOfEnemyPawns)
-        print(listOfNearEnemyPawns)
 
         if not len(listOfNearEnemyPawns) == 0:
             for enemyPawn in listOfNearEnemyPawns:
@@ -123,7 +122,6 @@ class Player(GlobalFunctionality):
                 enemyPawnY = enemyPawn.getCordinateY()
                 deltaX = enemyPawnX - choosenPawnX
                 deltaY = enemyPawnY - choosenPawnY
-                print(f"{deltaX}, {deltaY}")
                 if self.isMovePossible(self.pawnList, listOfEnemyPawns, matrix, enemyPawnX + deltaX, enemyPawnY + deltaY):
                     listOfBeatings.append((enemyPawnX + deltaX,  enemyPawnY + deltaY))
 
@@ -141,3 +139,9 @@ class Player(GlobalFunctionality):
 
     def choosingPawn(self):
         pass
+
+    def killPawn(self, x, y):
+
+        for pawn in self.pawnList:
+            if pawn.getCordinateX() == x and pawn. getCordinateY() == y:
+                self.pawnList.remove(pawn)
