@@ -21,10 +21,10 @@ class Board:
             coordinateY = i * 100
 
             if i % 2 == 0:
-                lastRectangle = 800  # CoordinatesX of first and last Rectangle in board row
+                lastRectangle = 700  # CoordinatesX of first and last Rectangle in board row
                 firstRectangle = 0  # When board row is starting with black rectangle
             else:
-                lastRectangle = 900  # CoordinatesX of first and last lRectangle in board row
+                lastRectangle = 800  # CoordinatesX of first and last lRectangle in board row
                 firstRectangle = 100  # When board row is starting with white rectangle
 
             for coordinateX in range(firstRectangle, lastRectangle, jump):
@@ -39,6 +39,15 @@ class Board:
             matrix.append(row)  # Adding 4 items row to matrix
 
         return matrix
+
+    def isRecInMatrix(self, recX, recY):
+        for row in self.matrix:
+            for rec in row:
+                x,y = rec
+                if recX == x and recY == y:
+                    return True
+        return False
+
 
     def getSize(self):
         return self.size

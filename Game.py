@@ -29,19 +29,20 @@ class Game(GlobalFunctionality):
         currentPlayer = redPlayer
         otherPlayer = bluePlayer
 
-
         while running:
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
                     running = False
 
-                priorityPawns = currentPlayer.searchingPriorityPawns(thisPawnList, otherPawnList)
+                priorityPawns = currentPlayer.searchingPriorityPawns(otherPawnList, self.board)
+
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         isPawnChoosed = False
                         self.listOfMoves.clear()
                         self.gameUpdate(redPlayer, bluePlayer)
+
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouseXPos, mouseYPos = pygame.mouse.get_pos()

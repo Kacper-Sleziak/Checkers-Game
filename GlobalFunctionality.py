@@ -36,17 +36,25 @@ class GlobalFunctionality(ABC):
                     return True
         return False
 
-    def isRectangleEmpty(self, x, y, pawnList, enemyPawnList):
+    def isRectangleEmpty(self, x, y, pawnList, enemyPawnList, board):
 
-        for pawn in pawnList:
-            if pawn.getCordinateX() == x and pawn.getCordinateY() == y:
-                return False
+        for row in board.getMatrix():
+            for rec in row:
+                recX, recY = rec
 
-        for pawn in enemyPawnList:
-            if pawn.getCordinateX() == x and pawn.getCordinateY() == y:
-                return False
+                if x == recX and y == recY:
 
-        return True
+                    for pawn in pawnList:
+                        if pawn.getCordinateX() == x and pawn.getCordinateY() == y:
+                            return False
+
+                    for pawn in enemyPawnList:
+                        if pawn.getCordinateX() == x and pawn.getCordinateY() == y:
+                            return False
+
+                    return True
+
+        return False
 
     def isEnemyThere(self, x, y, enemyPawnList):
 
