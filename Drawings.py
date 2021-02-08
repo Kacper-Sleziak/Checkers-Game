@@ -1,14 +1,14 @@
 import pygame
 
 class Drawings:
-    
+
     def __init__(self, window):
         self.window = window
         self.recSize = 100
         pass
 
     def drawBoard(self, board):
-        matrix = board.getMatrix()
+        matrix = board.matrix
         for row in matrix:
             for rectangle in row:
                 x, y = rectangle
@@ -19,9 +19,9 @@ class Drawings:
 
     def drawPawns(self, pawnList):
         for pawn in pawnList:
-            r, g, b = pawn.getColor()
+            r, g, b = pawn.color
             pygame.draw.circle(self.window, (r, g, b),
-                               (pawn.getCordinateX(), pawn.getCordinateY()), pawn.getRadius())
+                               (pawn.coordinateX, pawn.coordinateY), pawn.radius)
 
     def drawPosibleMoves(self, window, listOfMoves):
         for move in listOfMoves:

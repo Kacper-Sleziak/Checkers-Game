@@ -50,11 +50,11 @@ class Player(GlobalFunctionality):
 
         if priorityPawns == []:
             for pawn in self.pawnList:
-                if pawn.getCordinateX() == mouseXPos and pawn.getCordinateY() == mouseYPos:
+                if pawn.coordinateX == mouseXPos and pawn.coordinateY == mouseYPos:
                     return pawn
         else:
             for pawn in priorityPawns:
-                if pawn.getCordinateX() == mouseXPos and pawn.getCordinateY() == mouseYPos:
+                if pawn.coordinateX == mouseXPos and pawn.coordinateY == mouseYPos:
                     return pawn
 
         return False
@@ -86,8 +86,8 @@ class Player(GlobalFunctionality):
         leftRectangleCords = (0, 0)
         rightRectangleCords = (0, 0)
 
-        pawnX = pawn.getCordinateX()
-        pawnY = pawn.getCordinateY()
+        pawnX = pawn.coordinateX
+        pawnY = pawn.coordinateY
 
         if self.__color == (255, 0, 0):
             leftRectangleCords = (pawnX + 100, pawnY + 100)
@@ -118,8 +118,8 @@ class Player(GlobalFunctionality):
             enemy = 0
             vectorX, vectorY = vector
 
-            pawnX = pawn.getCordinateX()
-            pawnY = pawn.getCordinateY()
+            pawnX = pawn.coordinateX
+            pawnY = pawn.coordinateY
 
             while True:
                 pawnX += vectorX
@@ -142,15 +142,15 @@ class Player(GlobalFunctionality):
         priorityPawns = []
 
         for pawn in self.pawnList:
-            x = pawn.getCordinateX()
-            y = pawn.getCordinateY()
+            x = pawn.coordinateX
+            y = pawn.coordinateY
 
             listOfNearEnemyPawns = self.isEnemyNear(x, y, enemyPawnList)
 
             if listOfNearEnemyPawns != []:
                 for enemyPawn in listOfNearEnemyPawns:
-                    enemyX = enemyPawn.getCordinateX()
-                    enemyY = enemyPawn.getCordinateY()
+                    enemyX = enemyPawn.coordinateX
+                    enemyY = enemyPawn.coordinateY
                     deltaX = enemyX - x
                     deltaY = enemyY - y
                     if self.isRectangleEmpty(enemyX + deltaX, enemyY + deltaY, self.pawnList, enemyPawnList, board):
@@ -162,21 +162,21 @@ class Player(GlobalFunctionality):
         listOfNearEnemyPawns = []
         for pawn in listOfEnemyPawns:
 
-            if pawn.getCordinateX() == (x + 100) and pawn.getCordinateY() == (y + 100):
+            if pawn.coordinateX == (x + 100) and pawn.coordinateY == (y + 100):
                 listOfNearEnemyPawns.append(pawn)
 
-            elif pawn.getCordinateX() == (x + 100) and pawn.getCordinateY() == (y - 100):
+            elif pawn.coordinateX == (x + 100) and pawn.coordinateY == (y - 100):
                 listOfNearEnemyPawns.append(pawn)
 
-            elif pawn.getCordinateX() == (x - 100) and pawn.getCordinateY() == (y + 100):
+            elif pawn.coordinateX == (x - 100) and pawn.coordinateY == (y + 100):
                 listOfNearEnemyPawns.append(pawn)
 
-            elif pawn.getCordinateX() == (x - 100) and pawn.getCordinateY() == (y - 100):
+            elif pawn.coordinateX == (x - 100) and pawn.coordinateY == (y - 100):
                 listOfNearEnemyPawns.append(pawn)
 
         return listOfNearEnemyPawns
 
-    def getListOfBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, matrix):
+    def getListOfBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
 
         listOfBeatings = []
         listOfNearEnemyPawns = self.isEnemyNear(choosenPawn.coordinateX, choosenPawn.coordinateY, listOfEnemyPawns)
@@ -188,7 +188,7 @@ class Player(GlobalFunctionality):
                 enemyPawnY = enemyPawn.coordinateY
                 deltaX = enemyPawnX - choosenPawn.coordinateX
                 deltaY = enemyPawnY - choosenPawn.coordinateY
-                if self.isMovePossible(self.pawnList, listOfEnemyPawns, matrix, enemyPawnX + deltaX, enemyPawnY + deltaY):
+                if self.isMovePossible(self.pawnList, listOfEnemyPawns, board, enemyPawnX + deltaX, enemyPawnY + deltaY):
                     listOfBeatings.append((enemyPawnX + deltaX,  enemyPawnY + deltaY))
 
             if not len(listOfBeatings) == 0:
@@ -197,14 +197,37 @@ class Player(GlobalFunctionality):
 
         return listOfPossibleMoves
 
+    def getListOfPawnBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
+        listOfBeatings = []
+        listOfNearEnemyPawns = self.isEnemyNear(choosenPawn.coordinateX, choosenPawn.coordinateY, listOfEnemyPawns)
+
+        if not len(listOfNearEnemyPawns) == 0:
+            for enemyPawn in listOfNearEnemyPawns:
+
+                enemyPawnX = enemyPawn.coordinateX
+                enemyPawnY = enemyPawn.coordinateY
+                deltaX = enemyPawnX - choosenPawn.coordinateX
+                deltaY = enemyPawnY - choosenPawn.coordinateY
+                if self.isMovePossible(self.pawnList, listOfEnemyPawns, board, enemyPawnX + deltaX, enemyPawnY + deltaY):
+                    listOfBeatings.append((enemyPawnX + deltaX,  enemyPawnY + deltaY))
+
+            if not len(listOfBeatings) == 0:
+                listOfPossibleMoves.clear()
+                listOfPossibleMoves = listOfBeatings
+
+        return listOfPossibleMoves
+
+    def getListOfQueenBeatings(self):
+        pass
+
     def killPawn(self, x, y):
 
         for pawn in self.pawnList:
-            if pawn.getCordinateX() == x and pawn. getCordinateY() == y:
+            if pawn.coordinateX == x and pawn.coordinateY == y:
                 self.pawnList.remove(pawn)
 
     def isPawnInList(self, x, y, pawnList):
         for pawn in pawnList:
-            if x == pawn.getCordinateX() and y == pawn.getCordinateY():
+            if x == pawn.coordinateX and y == pawn.coordinateY:
                 return True
         return False

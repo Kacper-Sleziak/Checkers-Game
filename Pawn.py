@@ -20,28 +20,4 @@ class Pawn(GlobalFunctionality):
         for rec in listOfSpecialRect:
             recX, recY = rec
             if self.coordinateX == recX and self.coordinateY == recY:
-                self.setQueen()
-
-
-
-
-    def getCordinateX(self):
-        return self.coordinateX
-
-    def getCordinateY(self):
-        return self.coordinateY
-
-    def getRadius(self):
-        return self.radius
-
-    def getColor(self):
-        return self.color
-
-    def setCordinateY(self, newCoordinateY):
-        self.coordinateY = newCoordinateY
-
-    def setCordinateX(self, newCoordinateX):
-        self.coordinateX = newCoordinateX
-
-    def setQueen(self):
-        self.isQueen = True
+                self.isQueen = True

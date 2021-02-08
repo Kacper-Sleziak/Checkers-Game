@@ -47,10 +47,3 @@ class Board:
                 if recX == x and recY == y:
                     return True
         return False
-
-
-    def getSize(self):
-        return self.size
-
-    def getMatrix(self):
-        return self.matrix
