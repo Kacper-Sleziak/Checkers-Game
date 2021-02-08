@@ -19,9 +19,7 @@ class Pawn(GlobalFunctionality):
     def evolvePawnToQuen(self, listOfSpecialRect):
         for rec in listOfSpecialRect:
             recX, recY = rec
-            
             if self.coordinateX == recX and self.coordinateY == recY:
-                print("we are here")
                 self.setQueen()
 
 

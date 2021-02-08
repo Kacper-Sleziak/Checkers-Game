@@ -51,24 +51,22 @@ class Player(GlobalFunctionality):
         if priorityPawns == []:
             for pawn in self.pawnList:
                 if pawn.getCordinateX() == mouseXPos and pawn.getCordinateY() == mouseYPos:
-                    return True
+                    return pawn
         else:
             for pawn in priorityPawns:
                 if pawn.getCordinateX() == mouseXPos and pawn.getCordinateY() == mouseYPos:
-                    return True
+                    return pawn
 
         return False
 
-    def roundMovingPawn(self, mouseXPos, mouseYPos, listOfMoves, choosenPawnX, choosenPawnY):
+    def roundMovingPawn(self, mouseXPos, mouseYPos, listOfMoves, choosenPawn):
         for pawn in self.pawnList:
-            if pawn.getCordinateX() == choosenPawnX and pawn.getCordinateY() == choosenPawnY:
+            if pawn.coordinateX == choosenPawn.coordinateX and pawn.coordinateY == choosenPawn.coordinateY:
                 for move in listOfMoves:
                     x, y = move
                     if x == mouseXPos and y == mouseYPos:
                         pawn.movePawn(mouseXPos, mouseYPos)
                         pawn.evolvePawnToQuen(self.specialRec)
-
-
                         return False
         return True
 
@@ -104,7 +102,7 @@ class Player(GlobalFunctionality):
 
         for rectangle in listOfPossibleMoves:
             moveCordsX, moveCordsY = rectangle
-            if not self.isMovePossible(enemyPawnList, self.pawnList, board.getMatrix(), moveCordsX, moveCordsY): #Global
+            if not self.isMovePossible(enemyPawnList, self.pawnList, board.matrix, moveCordsX, moveCordsY): #Global
                 listOfPossibleMoves.remove(rectangle)
                 #rectangleToCheckX
         return listOfPossibleMoves
@@ -122,31 +120,23 @@ class Player(GlobalFunctionality):
 
             pawnX = pawn.getCordinateX()
             pawnY = pawn.getCordinateY()
-            print(f"pawnX = {pawnX}, pawnY = {pawnY},")
 
             while True:
                 pawnX += vectorX
                 pawnY += vectorY
-                print(f"RecX = {pawnX}, RecY = {pawnY}")
                 if not board.isRecInMatrix(pawnX, pawnY):
-                    print("Rectangle is not in Matrix")
                     break
                 if self.isPawnInList(pawnX, pawnY, self.pawnList):
-                    print("Sojusznik na lini")
                     break
                 if self.isPawnInList(pawnX, pawnY, enemyPawnList):
                     enemy += 1
-                    print("enemy pawn1")
                     if enemy >= 2:
-                        print("enemy pawn2")
                         break
                 else:
                     enemy = 0
-                    print("bezbledu")
                     listOfPossibleMoves.append((pawnX, pawnY))
 
         return listOfPossibleMoves
-
 
     def searchingPriorityPawns(self, enemyPawnList, board):
         priorityPawns = []
@@ -163,7 +153,6 @@ class Player(GlobalFunctionality):
                     enemyY = enemyPawn.getCordinateY()
                     deltaX = enemyX - x
                     deltaY = enemyY - y
-                    #print(f"{enemyX + deltaX},{enemyY + deltaY}")
                     if self.isRectangleEmpty(enemyX + deltaX, enemyY + deltaY, self.pawnList, enemyPawnList, board):
                         priorityPawns.append(pawn)
 
@@ -187,18 +176,18 @@ class Player(GlobalFunctionality):
 
         return listOfNearEnemyPawns
 
-    def getListOfBeatings(self, choosenPawnX, choosenPawnY, listOfPossibleMoves, listOfEnemyPawns, matrix):
+    def getListOfBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, matrix):
 
         listOfBeatings = []
-        listOfNearEnemyPawns = self.isEnemyNear(choosenPawnX, choosenPawnY, listOfEnemyPawns)
+        listOfNearEnemyPawns = self.isEnemyNear(choosenPawn.coordinateX, choosenPawn.coordinateY, listOfEnemyPawns)
 
         if not len(listOfNearEnemyPawns) == 0:
             for enemyPawn in listOfNearEnemyPawns:
 
-                enemyPawnX = enemyPawn.getCordinateX()
-                enemyPawnY = enemyPawn.getCordinateY()
-                deltaX = enemyPawnX - choosenPawnX
-                deltaY = enemyPawnY - choosenPawnY
+                enemyPawnX = enemyPawn.coordinateX
+                enemyPawnY = enemyPawn.coordinateY
+                deltaX = enemyPawnX - choosenPawn.coordinateX
+                deltaY = enemyPawnY - choosenPawn.coordinateY
                 if self.isMovePossible(self.pawnList, listOfEnemyPawns, matrix, enemyPawnX + deltaX, enemyPawnY + deltaY):
                     listOfBeatings.append((enemyPawnX + deltaX,  enemyPawnY + deltaY))
 
@@ -207,22 +196,6 @@ class Player(GlobalFunctionality):
                 listOfPossibleMoves = listOfBeatings
 
         return listOfPossibleMoves
-
-    def returnPawnFromCords(self, cordX, cordY):
-        for pawn in self.pawnList:
-            if pawn.getCordinateX() == cordX and pawn.getCordinateY() == cordY:
-                return pawn
-
-        return False
-
-    def getPawnList(self):
-        return self.pawnList
-
-    def movingPawn(self):
-        pass
-
-    def choosingPawn(self):
-        pass
 
     def killPawn(self, x, y):
 
