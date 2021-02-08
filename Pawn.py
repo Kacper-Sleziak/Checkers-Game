@@ -9,12 +9,23 @@ class Pawn(GlobalFunctionality):
         self.coordinateX = coordinateX
         self.coordinateY = coordinateY
         self.color = color
-        self.alive = True
         self.radius = 30
+        self.isQueen = False
 
-    # usun ta funkcje
-    def pawnDestroy(self):
-        self.alive = False
+    def movePawn(self, newX, newY):
+        self.coordinateX = newX
+        self.coordinateY = newY
+
+    def evolvePawnToQuen(self, listOfSpecialRect):
+        for rec in listOfSpecialRect:
+            recX, recY = rec
+            
+            if self.coordinateX == recX and self.coordinateY == recY:
+                print("we are here")
+                self.setQueen()
+
+
+
 
     def getCordinateX(self):
         return self.coordinateX
@@ -33,3 +44,6 @@ class Pawn(GlobalFunctionality):
 
     def setCordinateX(self, newCoordinateX):
         self.coordinateX = newCoordinateX
+
+    def setQueen(self):
+        self.isQueen = True

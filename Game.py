@@ -1,5 +1,6 @@
 from Board import Board
 from Player import Player
+from Pawn import Pawn
 import pygame
 from Drawings import Drawings
 from GlobalFunctionality import GlobalFunctionality
@@ -14,6 +15,7 @@ class Game(GlobalFunctionality):
         self.board = Board()
         self.choosenPawnX = 0
         self.choosenPawnY = 0
+        self.choosenPawn = Pawn(69, 96, (0,0,0))
         self.listOfMoves = []
 
     def mainLoop(self):
@@ -53,8 +55,10 @@ class Game(GlobalFunctionality):
                         if isPawnChoosed:
                             self.setChoosenPawnX(mouseXPos)
                             self.setChoosenPawnY(mouseYPos)
-                            self.listOfMoves = currentPlayer.getListOfMoves(self.choosenPawnX, self.choosenPawnY, self.round, otherPawnList, self.board)
-                            self.listOfMoves = currentPlayer.getListOfBeatings( self.choosenPawnX, self.choosenPawnY, self.listOfMoves, otherPawnList, self.board.getMatrix())
+
+                            self.choosenPawn = currentPlayer.returnPawnFromCords(mouseXPos, mouseYPos)
+                            self.listOfMoves = currentPlayer.getListOfMoves(self.choosenPawn, otherPawnList, self.board)
+                            #self.listOfMoves = currentPlayer.getListOfBeatings( self.choosenPawnX, self.choosenPawnY, self.listOfMoves, otherPawnList, self.board.getMatrix())
 
                     elif isPawnChoosed:
                          # jesli pomiedzy ruchem i obecna pozycja jest enemy i jesli ruch jest dozwolony, usun tego wroga
