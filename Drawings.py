@@ -1,6 +1,5 @@
 import pygame
 
-
 class Drawings:
     
     def __init__(self, window):

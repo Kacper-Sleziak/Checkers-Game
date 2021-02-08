@@ -113,24 +113,26 @@ class Player(GlobalFunctionality):
 
         listOfPossibleMoves = []
 
-        pawnX = pawn.getCordinateX()
-        pawnY = pawn.getCordinateY()
-        print(f"pawnX = {pawnX}, pawnY = {pawnY},")
-        listOfVectors= [(100, 100), (100, -100), (-100, -100), (-100, -100)]
+
+        listOfVectors= [(100, 100), (100, -100), (-100, 100), (-100, -100)]
         for vector in listOfVectors:
             i = 0
             enemy = 0
             vectorX, vectorY = vector
 
+            pawnX = pawn.getCordinateX()
+            pawnY = pawn.getCordinateY()
+            print(f"pawnX = {pawnX}, pawnY = {pawnY},")
+
             while True:
-                pawnX = pawnX + vectorX
-                pawnY = pawnY + vectorY
-                print(f"{pawnX}, {pawnY}")
+                pawnX += vectorX
+                pawnY += vectorY
+                print(f"RecX = {pawnX}, RecY = {pawnY}")
                 if not board.isRecInMatrix(pawnX, pawnY):
-                    print("blad boarda")
+                    print("Rectangle is not in Matrix")
                     break
                 if self.isPawnInList(pawnX, pawnY, self.pawnList):
-                    print("blad ally pawn")
+                    print("Sojusznik na lini")
                     break
                 if self.isPawnInList(pawnX, pawnY, enemyPawnList):
                     enemy += 1
@@ -138,10 +140,10 @@ class Player(GlobalFunctionality):
                     if enemy >= 2:
                         print("enemy pawn2")
                         break
-
-                enemy = 0
-                print("bezbledu")
-                listOfPossibleMoves.append((pawnX, pawnY))
+                else:
+                    enemy = 0
+                    print("bezbledu")
+                    listOfPossibleMoves.append((pawnX, pawnY))
 
         return listOfPossibleMoves
 
