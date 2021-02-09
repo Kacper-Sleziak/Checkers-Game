@@ -138,25 +138,6 @@ class Player(GlobalFunctionality):
 
         return listOfPossibleMoves
 
-    def searchingPriority(self, enemyPawnList, board):
-        priorityPawns = []
-
-        for pawn in self.pawnList:
-            x = pawn.coordinateX
-            y = pawn.coordinateY
-
-            listOfNearEnemyPawns = self.isEnemyNear(x, y, enemyPawnList)
-
-            if listOfNearEnemyPawns != []:
-                for enemyPawn in listOfNearEnemyPawns:
-                    enemyX = enemyPawn.coordinateX
-                    enemyY = enemyPawn.coordinateY
-                    deltaX = enemyX - x
-                    deltaY = enemyY - y
-                    if self.isRectangleEmpty(enemyX + deltaX, enemyY + deltaY, self.pawnList, enemyPawnList, board):
-                        priorityPawns.append(pawn)
-
-        return priorityPawns
 
     def searchingPriorityPawns(self, enemyPawnList, board):
         priorityPawns = []
