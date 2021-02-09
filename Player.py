@@ -138,7 +138,7 @@ class Player(GlobalFunctionality):
 
         return listOfPossibleMoves
 
-    def searchingPriorityPawns(self, enemyPawnList, board):
+    def searchingPriority(self, enemyPawnList, board):
         priorityPawns = []
 
         for pawn in self.pawnList:
@@ -157,6 +157,52 @@ class Player(GlobalFunctionality):
                         priorityPawns.append(pawn)
 
         return priorityPawns
+
+    def searchingPriorityPawns(self, enemyPawnList, board):
+        priorityPawns = []
+
+        for pawn in self.pawnList:
+            x = pawn.coordinateX
+            y = pawn.coordinateY
+
+            listOfNearEnemyPawns = self.isEnemyNear(x, y, enemyPawnList)
+            listOfVectors = [(100, 100), (100, -100), (-100, 100), (-100, -100)]
+
+            if pawn.isQueen == False:
+                if listOfNearEnemyPawns != []:
+                    for enemyPawn in listOfNearEnemyPawns:
+                        enemyX = enemyPawn.coordinateX
+                        enemyY = enemyPawn.coordinateY
+                        deltaX = enemyX - x
+                        deltaY = enemyY - y
+                        if self.isRectangleEmpty(enemyX + deltaX, enemyY + deltaY, self.pawnList, enemyPawnList, board):
+                            priorityPawns.append(pawn)
+            elif pawn.isQueen == True:
+
+                for vector in listOfVectors:
+                    vectorX, vectorY = vector
+
+                    pawnX = x
+                    pawnY = y
+                    enemy = 0
+
+                    while True:
+                        pawnX += vectorX
+                        pawnY += vectorY
+                        if not board.isRecInMatrix(pawnX, pawnY):
+                            break
+                        if self.isPawnInList(pawnX, pawnY, self.pawnList):
+                            break
+                        if enemy == 1 and self.isMovePossible(enemyPawnList, self.pawnList, board.matrix, pawnX,
+                                                              pawnY):
+                            priorityPawns.append(pawn)
+                        if self.isPawnInList(pawnX, pawnY, enemyPawnList):
+                            enemy += 1
+                        if enemy >= 2:
+                            break
+
+        return priorityPawns
+
 
     def isEnemyNear(self, x, y, listOfEnemyPawns):
         listOfNearEnemyPawns = []
