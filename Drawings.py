@@ -20,8 +20,16 @@ class Drawings:
     def drawPawns(self, pawnList):
         for pawn in pawnList:
             r, g, b = pawn.color
-            pygame.draw.circle(self.window, (r, g, b),
+            if pawn.isQueen == True and pawn.color == (255, 0, 0):
+                pygame.draw.circle(self.window, (255, 105, 105),
                                (pawn.coordinateX, pawn.coordinateY), pawn.radius)
+            elif pawn.isQueen == True and pawn.color == (0, 0, 255):
+                pygame.draw.circle(self.window, (105, 197, 255),
+                                   (pawn.coordinateX, pawn.coordinateY), pawn.radius)
+            else:
+                pygame.draw.circle(self.window, (r, g, b),
+                               (pawn.coordinateX, pawn.coordinateY), pawn.radius)
+
 
     def drawPosibleMoves(self, window, listOfMoves):
         for move in listOfMoves:

@@ -65,3 +65,28 @@ class GlobalFunctionality(ABC):
                 return True
 
         return False
+
+    def isMoveInListOfMoves(self, moveX, moveY, listOfMoves):
+        for move in listOfMoves:
+            x, y = move
+            if x == moveX and y == moveY:
+                return True
+        return False
+
+    def checkVectorDirection(self, pawn, mouseX, mouseY):
+        x = pawn.coordinateX
+        y = pawn.coordinateY
+        vectorX = 0
+        vectorY = 0
+
+        if mouseX - x > 0:
+            vectorX = 100
+        else:
+            vectorX = -100
+
+        if mouseY - y > 0:
+            vectorY = 100
+        else:
+            vectorY = -100
+
+        return (vectorX, vectorY)

@@ -24,8 +24,6 @@ class Game(GlobalFunctionality):
         redPlayer = Player((255, 0, 0))
         bluePlayer = Player((0, 0, 255))
 
-        thisPawnList = redPlayer.pawnList
-        otherPawnList = bluePlayer.pawnList
         currentPlayer = redPlayer
         otherPlayer = bluePlayer
 
@@ -35,7 +33,7 @@ class Game(GlobalFunctionality):
                 if event.type == pygame.QUIT:
                     running = False
 
-                priorityPawns = currentPlayer.searchingPriorityPawns(otherPawnList, self.board)
+                priorityPawns = currentPlayer.searchingPriorityPawns(otherPlayer.pawnList, self.board)
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -52,43 +50,50 @@ class Game(GlobalFunctionality):
                         if isPawnChoosed != False:
                             self.choosenPawn = isPawnChoosed
                             isPawnChoosed = True
-                            self.listOfMoves = currentPlayer.getListOfMoves(self.choosenPawn, otherPawnList, self.board)
-                            self.listOfMoves = currentPlayer.getListOfBeatings(self.choosenPawn, self.listOfMoves, otherPawnList, self.board.matrix)
+                            self.listOfMoves = currentPlayer.getListOfMoves(self.choosenPawn, otherPlayer.pawnList, self.board)
+                            self.listOfMoves = currentPlayer.getListOfBeatings(self.choosenPawn, self.listOfMoves, otherPlayer.pawnList, self.board)
 
                     elif isPawnChoosed:
                          # jesli pomiedzy ruchem i obecna pozycja jest enemy i jesli ruch jest dozwolony, usun tego wroga
-                        posibleEnemyX = 0.5 * (mouseXPos - self.choosenPawn.coordinateX) + self.choosenPawn.coordinateX
-                        posibleEnemyY = 0.5 * (mouseYPos - self.choosenPawn.coordinateY) + self.choosenPawn.coordinateY
                         pawnKilledEnemy = 0
-                        if self.isMovePossible(otherPawnList, currentPlayer.pawnList, self.board.matrix, mouseXPos, mouseYPos) and \
-                            self.isEnemyThere(posibleEnemyX, posibleEnemyY, otherPawnList):
-                            otherPlayer.killPawn(posibleEnemyX, posibleEnemyY)
-                            pawnKilledEnemy = 1
-                        isPawnChoosed = currentPlayer.roundMovingPawn(mouseXPos, mouseYPos, self.listOfMoves, self.choosenPawn)
 
+                        if self.isMoveInListOfMoves(mouseXPos, mouseYPos, self.listOfMoves):
+                            vector = self.checkVectorDirection(self.choosenPawn, mouseXPos, mouseYPos)
+                            vectorX, vectorY = vector
+                            positionX = self.choosenPawn.coordinateX
+                            positionY = self.choosenPawn.coordinateY
+                            while (positionX != mouseXPos and positionY != mouseYPos):
+                                positionX += vectorX
+                                positionY += vectorY
+                                if self.isEnemyThere(positionX, positionY, otherPlayer.pawnList):
+                                    otherPlayer.killPawn(positionX, positionY)
+                                    pawnKilledEnemy = 1
+
+
+                        isPawnChoosed = currentPlayer.roundMovingPawn(mouseXPos, mouseYPos, self.listOfMoves, self.choosenPawn)
+                        self.gameUpdate(redPlayer, bluePlayer)
                         if isPawnChoosed == False:
                             self.listOfMoves.clear()
                             if pawnKilledEnemy == 1:
-                                self.listOfMoves = currentPlayer.getListOfBeatings(self.choosenPawn, self.listOfMoves, otherPawnList, self.board.matrix)
+                                self.listOfMoves = currentPlayer.getListOfBeatings(self.choosenPawn, self.listOfMoves, otherPlayer.pawnList, self.board)
 
                         if isPawnChoosed == False and len(self.listOfMoves) == 0:
                             if self.round == "red":
                                 self.round = "blue"
                                 currentPlayer = bluePlayer
                                 otherPlayer = redPlayer
-                                otherPawnList = redPlayer.pawnList
-                                thisPawnList = bluePlayer.pawnList
-                                print(self.round)
                             else:
                                 self.round = "red"
                                 currentPlayer = redPlayer
                                 otherPlayer = bluePlayer
-                                otherPawnList = bluePlayer.pawnList
-                                thisPawnList = redPlayer.pawnList
-                                print(self.round)
 
                             self.listOfMoves.clear()
                             priorityPawns.clear()
+
+                    print(len(currentPlayer.pawnList))
+                    if len(currentPlayer.pawnList) == 0:
+                        print(f"The end!")
+                        running = False
 
             self.gameUpdate(redPlayer, bluePlayer)
 

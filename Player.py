@@ -17,16 +17,20 @@ class Player(GlobalFunctionality):
         pawnList = []
 
         if self.__color == (255, 0, 0):
-            pawnList.append(self.__createPawn(50, 50))
-            pawnList.append(self.__createPawn(250, 50))
-            pawnList.append(self.__createPawn(450, 50))
-            pawnList.append(self.__createPawn(650, 50))
+            for i in range(3):
+                for j in range (4):
+                    if i%2 != 0:
+                        pawnList.append(self.__createPawn(150 + j * 200, 50 + i *100))
+                    else:
+                        pawnList.append(self.__createPawn(50 + j * 200, 50 + i *100))
 
         elif self.__color == (0, 0, 255):
-            pawnList.append(self.__createPawn(150, 750))
-            pawnList.append(self.__createPawn(350, 750))
-            pawnList.append(self.__createPawn(550, 750))
-            pawnList.append(self.__createPawn(750, 750))
+            for i in range(3):
+                for j in range (4):
+                    if i%2 != 0:
+                        pawnList.append(self.__createPawn(50 + j * 200, 750 - i *100))
+                    else:
+                        pawnList.append(self.__createPawn(150 + j * 200, 750 - i *100))            
 
         return pawnList
 
@@ -111,11 +115,8 @@ class Player(GlobalFunctionality):
 
         listOfPossibleMoves = []
 
-
         listOfVectors= [(100, 100), (100, -100), (-100, 100), (-100, -100)]
         for vector in listOfVectors:
-            i = 0
-            enemy = 0
             vectorX, vectorY = vector
 
             pawnX = pawn.coordinateX
@@ -129,12 +130,11 @@ class Player(GlobalFunctionality):
                 if self.isPawnInList(pawnX, pawnY, self.pawnList):
                     break
                 if self.isPawnInList(pawnX, pawnY, enemyPawnList):
-                    enemy += 1
-                    if enemy >= 2:
-                        break
+                    break
                 else:
-                    enemy = 0
                     listOfPossibleMoves.append((pawnX, pawnY))
+
+
 
         return listOfPossibleMoves
 
@@ -179,46 +179,62 @@ class Player(GlobalFunctionality):
     def getListOfBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
 
         listOfBeatings = []
-        listOfNearEnemyPawns = self.isEnemyNear(choosenPawn.coordinateX, choosenPawn.coordinateY, listOfEnemyPawns)
+        if choosenPawn.isQueen == False:
+            listOfBeatings = self.getListOfPawnBeatings(choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board)
 
-        if not len(listOfNearEnemyPawns) == 0:
-            for enemyPawn in listOfNearEnemyPawns:
+        elif choosenPawn.isQueen == True:
+            listOfBeatings = self.getListOfQueenBeatings(choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board)
 
-                enemyPawnX = enemyPawn.coordinateX
-                enemyPawnY = enemyPawn.coordinateY
-                deltaX = enemyPawnX - choosenPawn.coordinateX
-                deltaY = enemyPawnY - choosenPawn.coordinateY
-                if self.isMovePossible(self.pawnList, listOfEnemyPawns, board, enemyPawnX + deltaX, enemyPawnY + deltaY):
-                    listOfBeatings.append((enemyPawnX + deltaX,  enemyPawnY + deltaY))
-
-            if not len(listOfBeatings) == 0:
-                listOfPossibleMoves.clear()
-                listOfPossibleMoves = listOfBeatings
-
-        return listOfPossibleMoves
+        return listOfBeatings
 
     def getListOfPawnBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
         listOfBeatings = []
         listOfNearEnemyPawns = self.isEnemyNear(choosenPawn.coordinateX, choosenPawn.coordinateY, listOfEnemyPawns)
 
-        if not len(listOfNearEnemyPawns) == 0:
+        if len(listOfNearEnemyPawns) != 0:
             for enemyPawn in listOfNearEnemyPawns:
 
                 enemyPawnX = enemyPawn.coordinateX
                 enemyPawnY = enemyPawn.coordinateY
                 deltaX = enemyPawnX - choosenPawn.coordinateX
                 deltaY = enemyPawnY - choosenPawn.coordinateY
-                if self.isMovePossible(self.pawnList, listOfEnemyPawns, board, enemyPawnX + deltaX, enemyPawnY + deltaY):
+                if self.isMovePossible(self.pawnList, listOfEnemyPawns, board.matrix, enemyPawnX + deltaX, enemyPawnY + deltaY):
                     listOfBeatings.append((enemyPawnX + deltaX,  enemyPawnY + deltaY))
 
-            if not len(listOfBeatings) == 0:
+            if len(listOfBeatings) != 0:
                 listOfPossibleMoves.clear()
                 listOfPossibleMoves = listOfBeatings
 
         return listOfPossibleMoves
 
-    def getListOfQueenBeatings(self):
-        pass
+    def getListOfQueenBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
+
+        listOfPossibleBeatings = []
+        listOfVectors= [(100, 100), (100, -100), (-100, 100), (-100, -100)]
+        for vector in listOfVectors:
+            vectorX, vectorY = vector
+
+            pawnX = choosenPawn.coordinateX
+            pawnY = choosenPawn.coordinateY
+            enemy = 0
+
+            while True:
+                pawnX += vectorX
+                pawnY += vectorY
+                if not board.isRecInMatrix(pawnX, pawnY):
+                    break
+                if self.isPawnInList(pawnX, pawnY, self.pawnList):
+                    break
+                if enemy == 1 and self.isMovePossible(listOfEnemyPawns ,self.pawnList, board.matrix, pawnX, pawnY):
+                    listOfPossibleBeatings.append((pawnX, pawnY))
+                if self.isPawnInList(pawnX, pawnY, listOfEnemyPawns):
+                    enemy += 1
+                if enemy >= 2:
+                    break
+        if len(listOfPossibleBeatings) == 0:
+            listOfPossibleBeatings = listOfPossibleMoves
+
+        return listOfPossibleBeatings
 
     def killPawn(self, x, y):
 
