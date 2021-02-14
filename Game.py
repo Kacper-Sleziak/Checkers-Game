@@ -8,13 +8,14 @@ import pygame
 
 class Game(GlobalFunctionality):
 
-    def __init__(self, window):
+    def __init__(self, window, gameMode):
         super().__init__()
         self.window = window
         self.round = "red"
         self.board = Board()
         self.choosenPawn = Pawn(69, 420, (21,3,7))
         self.listOfMoves = []
+        self.gameMode = gameMode
 
     def mainLoop(self):
 

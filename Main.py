@@ -11,5 +11,5 @@ pygame.display.set_caption("Checkers")
 icon = pygame.image.load('chess-board.png')
 pygame.display.set_icon(icon)
 
-game = Game(window)
+game = Game(window, "single player")
 game.mainLoop()

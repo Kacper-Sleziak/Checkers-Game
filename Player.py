@@ -9,6 +9,7 @@ class Player(GlobalFunctionality):
         self.specialRec = self.__createSpecialRec()
         self.pawnList = self.__createPawnList()
 
+
     def __createPawn(self, coordinateX, coordinateY):
         pawn = Pawn(coordinateX, coordinateY, self.__color)
         return pawn
