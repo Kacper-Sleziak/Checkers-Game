@@ -16,7 +16,6 @@ serverSocket.listen()
 
 msg = pickle.dumps(Player((255, 0, 0)))
 msg = add_header(msg, 10)
-print(msg)
 
 while True:
     clientSocket, clientAddress = serverSocket.accept()
