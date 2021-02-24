@@ -7,6 +7,7 @@ class Network():
         self.address = ("192.168.0.2", 2140)
         self.HEADERSIZE = 10
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #self.serverSocket
 
     def connect(self):
         self.clientSocket.connect(self.address)
@@ -32,3 +33,6 @@ class Network():
                 fullMsg = b''
 
         return receivedObject
+
+    def sendingToServer(self):
+        self.clientSocket.sendall(b'hello')

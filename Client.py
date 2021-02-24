@@ -7,6 +7,9 @@ from Network import Network
 Network = Network()
 Network.connect()
 
+while True:
 
-receivedObject = Network.gettingObjFromServer()
-print(receivedObject.xd)
+    Network.sendingToServer()
+    receivedObject = Network.gettingObjFromServer()
+    print(receivedObject.xd)
+    

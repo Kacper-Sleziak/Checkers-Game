@@ -20,4 +20,9 @@ msg = add_header(msg, 10)
 while True:
     clientSocket, clientAddress = serverSocket.accept()
     print(f"conection from {clientAddress}")
-    clientSocket.send(msg)
+    while True:
+
+        receivedMsg = clientSocket.recv(1024)
+        clientSocket.sendall(msg)
+        print(receivedMsg.decode("utf-8"))
+        
