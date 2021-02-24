@@ -1,16 +1,41 @@
+import socket
+import pickle
+from Player import Player
+
+
 class Client():
-    def __init__(self, player):
-        #self.clientSocket
-        pass
+    def __init__(self):
+        self.address = ("192.168.0.2", 2140)
+        self.HEADERSIZE = 10
+        self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self):
-        pass
+        self.clientSocket.connect(self.address)
 
-    def sending(self):
-        pass
+    def gettingMsgFromServer(self):
+        fullMsg = b''
+        isNewMsg = True
+        msgLen = 0
 
-    def getting(self):
-        pass
+        while True:
 
-    def serverHandling(self):
-        pass
+            msg = self.clientSocket.recv(16)
+            if isNewMsg:
+                msgLen = int(msg[:self.HEADERSIZE])
+                print(f"len = {msgLen}")
+                isNewMsg = False
+
+            fullMsg += msg
+
+            if len(fullMsg) == msgLen + self.HEADERSIZE:
+                print(f"recive: {fullMsg[self.HEADERSIZE:]}")
+                receivedObject = pickle.loads(fullMsg[self.HEADERSIZE:])
+                print(f"xd = {receivedObject.xd}")
+                isNewMsg = True
+                fullMsg = b''
+
+        return receivedObject
+Client = Client()
+Client.connect()
+receivedObject = Client.gettingMsgFromServer()
+print(receivedObject.xd)

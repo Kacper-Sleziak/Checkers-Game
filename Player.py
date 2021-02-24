@@ -8,6 +8,7 @@ class Player(GlobalFunctionality):
         self.__color = color
         self.specialRec = self.__createSpecialRec()
         self.pawnList = self.__createPawnList()
+        self.xd = "xd"
 
 
     def __createPawn(self, coordinateX, coordinateY):
@@ -31,7 +32,7 @@ class Player(GlobalFunctionality):
                     if i%2 != 0:
                         pawnList.append(self.__createPawn(50 + j * 200, 750 - i *100))
                     else:
-                        pawnList.append(self.__createPawn(150 + j * 200, 750 - i *100))            
+                        pawnList.append(self.__createPawn(150 + j * 200, 750 - i *100))
 
         return pawnList
 
