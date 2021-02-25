@@ -36,3 +36,13 @@ class Network():
 
     def sendingToServer(self):
         self.clientSocket.sendall(b'hello')
+
+    def send_and_recive(self, data):
+        try:
+            self.clientSocket.send(str.encode(data))
+            reply = self.clientSocket.recv(2048)
+            reply = reply.decode("utf-8")
+            return reply
+        except:
+            return 1
+            pass

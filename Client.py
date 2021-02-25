@@ -9,7 +9,12 @@ Network.connect()
 
 while True:
 
-    Network.sendingToServer()
-    receivedObject = Network.gettingObjFromServer()
-    print(receivedObject.xd)
-    
+    msg = Network.clientSocket.recv(2048)
+    print(msg.decode("utf-8"))
+    newMsg = Network.send_and_recive("wysylam-1")
+    print(newMsg)
+    newMsg = Network.send_and_recive("wysylam-klient2")
+    print(newMsg)
+    newMsg = Network.send_and_recive("wysylam333")
+    print(newMsg)
+    Network.clientSocket.close()
