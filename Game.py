@@ -93,10 +93,10 @@ class Game(GlobalFunctionality):
 
                             if len(otherPlayer.pawnList) == 0:  ## warunek konca do poprawy - dodaj sytuacje kiedy nie ma mozliwosci ruchow
                                 print(f"The end!")
-                                return False
+                                return (False, currentPlayer, otherPlayer)
 
                             running = False
-                            return True
+                            return (True, currentPlayer, otherPlayer)
 
 
 

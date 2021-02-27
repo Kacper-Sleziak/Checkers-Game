@@ -20,9 +20,9 @@ turn = 0
 running = True
 while running:
     if turn % 2 == 0:
-        running = game.singleRound(redPlayer, bluePlayer)
+        running = game.singleRound(redPlayer, bluePlayer)[0]
     elif turn % 2 == 1:
-        running = game.singleRound(bluePlayer, redPlayer)
+        running = game.singleRound(bluePlayer, redPlayer)[0]
 
     turn += 1
 
