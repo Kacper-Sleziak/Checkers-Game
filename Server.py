@@ -6,7 +6,26 @@ from TestClass import TestClass
 
 
 def add_header(msg, headerSize):
-    return f'{len(msg):<{headerSize}}', "utf-8" + msg
+    return bytes(f'{len(msg):<{headerSize}}', "utf-8") + msg
+
+
+def recivingObjectWithHeaders(clientSocket, HEADERSIZE):
+    fullMsg = b''
+    newMsg = True
+    running = True
+    while running:
+        msg = clientSocket.recv(16)
+        if newMsg:
+            newMsg = False
+            msgLen = int(msg[:HEADERSIZE])
+
+        fullMsg +=msg
+
+        if len(fullMsg) == msgLen + HEADERSIZE:
+            receivedObject = pickle.loads(fullMsg[HEADERSIZE:])
+            running = False
+
+    return receivedObject
 
 
 def client_thread(clientSocket):
@@ -14,11 +33,11 @@ def client_thread(clientSocket):
     sendMsg = Player((420,30,50))
     while True:
         try:
-            receivedMsg = clientSocket.recv(4096)
-            print("tutaj")
-            d = pickle.loads(receivedMsg)
-            print(d.x)
+            # reciving object
+            receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
+            #sending object
             sendMsgPicle = pickle.dumps(sendMsg)
+            sendMsgPicle = add_header(sendMsgPicle, 10)
             clientSocket.sendall(sendMsgPicle)
         except:
             break

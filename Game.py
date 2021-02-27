@@ -90,6 +90,7 @@ class Game(GlobalFunctionality):
 
                             self.listOfMoves.clear()
                             priorityPawns.clear()
+                            self.gameUpdate(currentPlayer, otherPlayer)
 
                             if len(otherPlayer.pawnList) == 0:  ## warunek konca do poprawy - dodaj sytuacje kiedy nie ma mozliwosci ruchow
                                 print(f"The end!")
