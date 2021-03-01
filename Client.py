@@ -34,14 +34,5 @@ while True:
     #sendObject = (currentPlayer, otherPlayer)
     newMsg = Network.sendingAndGettingObjFromServer(currentPlayer)
     print(f"newMsg = {newMsg}")
-
-    # newMsg = Network.sendingAndGettingObjFromServer(sendObject)
-    # print(newMsg.x)
-    # time.sleep(4)
-    # newMsg = Network.sendingAndGettingObjFromServer(sendObject)
-    # print(newMsg.x)
-    # time.sleep(4)
-    # newMsg = Network.sendingAndGettingObjFromServer(sendObject)
-    # print(newMsg.x)
-    # time.sleep(10)
-    Network.clientSocket.close()
+    
+Network.clientSocket.close()

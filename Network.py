@@ -5,7 +5,7 @@ from TestClass import TestClass
 
 class Network():
     def __init__(self):
-        self.address = ("192.168.0.105", 2140)
+        self.address = ("192.168.0.2", 2140)
         self.HEADERSIZE = 10
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #self.serverSocket
@@ -16,12 +16,13 @@ class Network():
     def sendingAndGettingObjFromServer(self, sendObject):
         try:
             #sending object
+            print("send start")
             sendMsg = pickle.dumps(sendObject)
             sendMsg = self.add_header(sendMsg, 10)
             self.clientSocket.send(sendMsg)
             #getting object
+            print("recive start")
             receivedObject = self.recivingObjectWithHeaders(self.clientSocket, 10)
-            print(receivedObject)
             return receivedObject
         except:
             pass

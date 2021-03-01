@@ -30,21 +30,26 @@ def recivingObjectWithHeaders(clientSocket, HEADERSIZE):
 
 def client_thread(clientSocket):
     clientSocket.send(b'Welcome to server')
-    sendMsg = Player((420,30,50))
+    #sendMsg = Player((420,30,50))
     while True:
+
         try:
             # reciving object
             receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
+            print("1")
             #sending object
-            sendMsgPicle = pickle.dumps(sendMsg)
+            sendMsgPicle = pickle.dumps(receivedMsg)
+            print("2")
             sendMsgPicle = add_header(sendMsgPicle, 10)
+            print("3")
             clientSocket.sendall(sendMsgPicle)
         except:
-            break
+            pass
+
     print("Conection lost")
     clientSocket.close()
 
-ip = "192.168.0.105"
+ip = "192.168.0.2"
 port = 2140
 address = (ip, port)
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
