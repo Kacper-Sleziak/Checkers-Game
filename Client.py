@@ -25,14 +25,20 @@ currentPlayer = Player((255, 0, 0))
 enemyPlayer = Player((0, 0, 255))
 
 
-msg = Network.clientSocket.recv(2048)
-print(msg.decode("utf-8"))
-while True:
+id = Network.recivingObjectWithHeaders(Network.clientSocket, Network.HEADERSIZE)
+Network.id = id
 
-    ending, currentPlayer, otherPlayer = game.singleRound(currentPlayer, enemyPlayer)
+if id == "not conected":
+    print(f"Welcome, server i full.. you fool !")
+    Network.clientSocket.close()
+else:
+    print(f"Welcome to server, you are -> {Network.id} player")
+    while True:
 
-    #sendObject = (currentPlayer, otherPlayer)
-    newMsg = Network.sendingAndGettingObjFromServer(currentPlayer)
-    print(f"newMsg = {newMsg}")
-    
-Network.clientSocket.close()
+        ending, currentPlayer, otherPlayer = game.singleRound(currentPlayer, enemyPlayer)
+
+        #sendObject = (currentPlayer, otherPlayer)
+        newMsg = Network.sendingAndGettingObjFromServer(currentPlayer)
+        print(f"newMsg = {newMsg}")
+
+    Network.clientSocket.close()
