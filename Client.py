@@ -44,7 +44,8 @@ else:
     while True:
 
         sendObject = (Network.id, currentPlayer, enemyPlayer)
-        newMsg = Network.sendingAndGettingObjFromServer(sendObject)
+        Network.sendingObjToServer(sendObject)
+        newMsg = Network.recivingObjFromServer()
         print(f"turn = {newMsg[0]}")
         turn = newMsg[0]
         currentPlayer = newMsg[1]

@@ -13,18 +13,21 @@ class Network():
     def connect(self):
         self.clientSocket.connect(self.address)
 
-    def sendingAndGettingObjFromServer(self, sendObject):
+    def sendingObjToServer(self, sendObject):
         try:
             #sending object
             sendMsg = pickle.dumps(sendObject)
             sendMsg = self.add_header(sendMsg, 10)
             self.clientSocket.send(sendMsg)
-            #getting object
+        except:
+            pass
+
+    def recivingObjFromServer(self):
+        try:
             receivedObject = self.recivingObjectWithHeaders(self.clientSocket, 10)
             return receivedObject
         except:
             pass
-
 
     def recivingObjectWithHeaders(self, clientSocket, HEADERSIZE):
         fullMsg = b''
