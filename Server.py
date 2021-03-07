@@ -33,7 +33,7 @@ def changeTurn(turn):
     return turn
 
 
-def client_thread(clientSocket, id):
+def client_thread(clientSocket, enemySocket, id):
     global redPlayer
     global bluePlayer
     global turn
@@ -51,18 +51,22 @@ def client_thread(clientSocket, id):
 
             sendMsgPicle = pickle.dumps(sendMsg)
             sendMsgPicle = add_header(sendMsgPicle, 10)
-            clientSocket.sendall(sendMsgPicle)
+            #clientSocket.sendall(sendMsgPicle)
+            enemySocket.sendall(sendMsgPicle)
             # reciving object
             receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
             if id == turn:
                 if id == 0:
                     redPlayer = receivedMsg[1]
-                    #bluePlayer = receivedMsg[2]
+                    bluePlayer = receivedMsg[2]
                 elif id == 1:
-                    #redPlayer = receivedMsg[2]
+                    redPlayer = receivedMsg[2]
                     bluePlayer = receivedMsg[1]
+
             # change turn
-            turn = changeTurn(turn)
+            print(f'turn = {turn}, id = {id}')
+            if id == turn:
+                turn = changeTurn(turn)
 
         except:
             pass
@@ -92,8 +96,8 @@ while True:
         clientSocket0 = clientSocket
     elif conectedPayers == 1:
         clientSocket1 = clientSocket
-        start_new_thread(client_thread, (clientSocket0, 0,))
-        start_new_thread(client_thread, (clientSocket1, 1,))
+        start_new_thread(client_thread, (clientSocket0, clientSocket1, 0,))
+        start_new_thread(client_thread, (clientSocket1, clientSocket0, 1,))
     else:
         print("server is full")
         msg = pickle.dumps("not conected")

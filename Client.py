@@ -43,6 +43,7 @@ else:
     print(f"Welcome to server, you are -> {Network.id} player")
     while True:
 
+
         # reciving msg from server
         newMsg = Network.recivingObjFromServer()
         print(f"turn = {newMsg[0]}")
