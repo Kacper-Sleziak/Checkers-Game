@@ -50,9 +50,9 @@ def client_thread(clientSocket, enemySocket, id):
                 if id == 0:
                     redPlayer = receivedMsg[1]
                     print("send red")
-                    #bluePlayer = receivedMsg[2]
+                    bluePlayer = receivedMsg[2]
                 elif id == 1:
-                    #redPlayer = receivedMsg[2]
+                    redPlayer = receivedMsg[2]
                     bluePlayer = receivedMsg[1]
                     print("send blue")
                 # change turn
