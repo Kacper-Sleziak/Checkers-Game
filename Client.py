@@ -45,7 +45,7 @@ else:
 
 
         # reciving msg from server
-        if turn != id:    
+        if turn != id:
             newMsg = Network.recivingObjFromServer()
             print(f"turn = {newMsg[0]}")
             turn = newMsg[0]
@@ -56,7 +56,8 @@ else:
         if turn == id :
             # plaing turn
             if turn == Network.id:
-                turn, currentPlayer, enemyPlayer = game.singleRound(currentPlayer, enemyPlayer)
+                ending, currentPlayer, enemyPlayer = game.singleRound(currentPlayer, enemyPlayer)
+                turn = (turn + 1) % 2
 
             # sending msg to server
             sendObject = (Network.id, currentPlayer, enemyPlayer)
