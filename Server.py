@@ -28,6 +28,11 @@ def recivingObjectWithHeaders(clientSocket, HEADERSIZE):
     return receivedObject
 
 
+def changeTurn(turn):
+    turn = (turn + 1) % 2
+    return turn
+
+
 def client_thread(clientSocket, id):
     global redPlayer
     global bluePlayer
@@ -41,10 +46,29 @@ def client_thread(clientSocket, id):
         try:
             # reciving object
             receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
+            id = receivedMsg[0]
+            if id == turn:
+                if id == 0:
+                    redPlayer = receivedMsg[1]
+                    #bluePlayer = receivedMsg[2]
+                    print("q1")
+                elif id == 1:
+                    #redPlayer = receivedMsg[2]
+                    bluePlayer = receivedMsg[1]
+                    print("q2")
             #sending object
-            sendMsgPicle = pickle.dumps(receivedMsg)
+            if id == 0:
+                sendMsg = (turn, redPlayer, bluePlayer)
+                print("q3")
+            elif id == 1:
+                sendMsg = (turn, bluePlayer, redPlayer)
+                print("q4")
+
+            sendMsgPicle = pickle.dumps(sendMsg)
             sendMsgPicle = add_header(sendMsgPicle, 10)
             clientSocket.sendall(sendMsgPicle)
+            print (turn)
+            turn = changeTurn(turn)
         except:
             pass
 
