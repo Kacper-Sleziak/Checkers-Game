@@ -43,31 +43,48 @@ def client_thread(clientSocket, enemySocket, id):
     while True:
 
         try:
-            #sending object
-            if id == 0:
-                sendMsg = (turn, redPlayer, bluePlayer)
-            elif id == 1:
-                sendMsg = (turn, bluePlayer, redPlayer)
-
-            sendMsgPicle = pickle.dumps(sendMsg)
-            sendMsgPicle = add_header(sendMsgPicle, 10)
-            #clientSocket.sendall(sendMsgPicle)
-            enemySocket.sendall(sendMsgPicle)
-            # reciving object
-            receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
             if id == turn:
+                # reciving object
+                receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
+                # change current player position
                 if id == 0:
                     redPlayer = receivedMsg[1]
-                    bluePlayer = receivedMsg[2]
+                    print("send red")
+                    #bluePlayer = receivedMsg[2]
                 elif id == 1:
-                    redPlayer = receivedMsg[2]
+                    #redPlayer = receivedMsg[2]
                     bluePlayer = receivedMsg[1]
-
-            # change turn
-            print(f'turn = {turn}, id = {id}')
-            if id == turn:
+                    print("send blue")
+                # change turn
+                print(f'turn = {turn}, id = {id}')
                 turn = changeTurn(turn)
+                #sending object
+                if id == 0:
+                    ToMe = (turn, redPlayer, bluePlayer)
+                    ToEnemy = (turn, bluePlayer, redPlayer)
+                elif id == 1:
+                    ToMe = (turn, bluePlayer, redPlayer)
+                    ToEnemy = (turn, redPlayer, bluePlayer)
+                # sending to my client
+                picleToMe = pickle.dumps(ToMe)
+                picleToMe = add_header(picleToMe, 10)
+                #clientSocket.sendall(picleToMe)
+                # sending to enemy client
+                picleToEnemy = pickle.dumps(ToEnemy)
+                picleToEnemy = add_header(picleToEnemy, 10)
+                enemySocket.sendall(picleToEnemy)
 
+            # else:
+            #
+            #     # reciving object
+            #     receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
+            #
+            #     if id == 0:
+            #         #redPlayer = receivedMsg[1]
+            #         bluePlayer = receivedMsg[2]
+            #     elif id == 1:
+            #         redPlayer = receivedMsg[2]
+            #         #bluePlayer = receivedMsg[1]
         except:
             pass
 
