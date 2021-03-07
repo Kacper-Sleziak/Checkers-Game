@@ -43,8 +43,7 @@ else:
     print(f"Welcome to server, you are -> {Network.id} player")
     while True:
 
-        sendObject = (Network.id, currentPlayer, enemyPlayer)
-        Network.sendingObjToServer(sendObject)
+        # reciving msg from server
         newMsg = Network.recivingObjFromServer()
         print(f"turn = {newMsg[0]}")
         turn = newMsg[0]
@@ -52,11 +51,16 @@ else:
         enemyPlayer = newMsg[2]
         game.gameUpdate(currentPlayer, enemyPlayer)
 
+        # plaing turn
         if turn == Network.id:
             turn, currentPlayer, enemyPlayer = game.singleRound(currentPlayer, enemyPlayer)
         else:
             game.gameUpdate(currentPlayer, enemyPlayer)
 
+        # sending msg to server
+        sendObject = (Network.id, currentPlayer, enemyPlayer)
+        Network.sendingObjToServer(sendObject)
         game.gameUpdate(currentPlayer, enemyPlayer)
+
 
     Network.clientSocket.close()

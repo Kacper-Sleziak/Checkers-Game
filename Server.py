@@ -37,38 +37,33 @@ def client_thread(clientSocket, id):
     global redPlayer
     global bluePlayer
     global turn
-    id = pickle.dumps(id)
-    id = add_header(id, 10)
-    clientSocket.send(id)
-    #sendMsg = Player((420,30,50))
+    idSend = pickle.dumps(id)
+    idSend = add_header(idSend, 10)
+    clientSocket.send(idSend)
     while True:
 
         try:
-            # reciving object
-            receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
-            id = receivedMsg[0]
-            if id == turn:
-                if id == 0:
-                    redPlayer = receivedMsg[1]
-                    #bluePlayer = receivedMsg[2]
-                    print("q1")
-                elif id == 1:
-                    #redPlayer = receivedMsg[2]
-                    bluePlayer = receivedMsg[1]
-                    print("q2")
             #sending object
             if id == 0:
                 sendMsg = (turn, redPlayer, bluePlayer)
-                print("q3")
             elif id == 1:
                 sendMsg = (turn, bluePlayer, redPlayer)
-                print("q4")
 
             sendMsgPicle = pickle.dumps(sendMsg)
             sendMsgPicle = add_header(sendMsgPicle, 10)
             clientSocket.sendall(sendMsgPicle)
-            print (turn)
+            # reciving object
+            receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
+            if id == turn:
+                if id == 0:
+                    redPlayer = receivedMsg[1]
+                    #bluePlayer = receivedMsg[2]
+                elif id == 1:
+                    #redPlayer = receivedMsg[2]
+                    bluePlayer = receivedMsg[1]
+            # change turn
             turn = changeTurn(turn)
+
         except:
             pass
 
