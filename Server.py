@@ -2,7 +2,6 @@ import socket
 import pickle
 from _thread import *
 from Player import Player
-from TestClass import TestClass
 
 
 def add_header(msg, headerSize):
@@ -46,17 +45,14 @@ def client_thread(clientSocket, enemySocket, id):
             if id == turn:
                 # reciving object
                 receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
-                # change current player position
+                # change players positions
                 if id == 0:
                     redPlayer = receivedMsg[1]
-                    print("send red")
                     bluePlayer = receivedMsg[2]
                 elif id == 1:
                     redPlayer = receivedMsg[2]
                     bluePlayer = receivedMsg[1]
-                    print("send blue")
                 # change turn
-                print(f'turn = {turn}, id = {id}')
                 turn = changeTurn(turn)
                 #sending object
                 if id == 0:
@@ -65,26 +61,10 @@ def client_thread(clientSocket, enemySocket, id):
                 elif id == 1:
                     ToMe = (turn, bluePlayer, redPlayer)
                     ToEnemy = (turn, redPlayer, bluePlayer)
-                # sending to my client
-                picleToMe = pickle.dumps(ToMe)
-                picleToMe = add_header(picleToMe, 10)
-                #clientSocket.sendall(picleToMe)
                 # sending to enemy client
                 picleToEnemy = pickle.dumps(ToEnemy)
                 picleToEnemy = add_header(picleToEnemy, 10)
                 enemySocket.sendall(picleToEnemy)
-
-            # else:
-            #
-            #     # reciving object
-            #     receivedMsg = recivingObjectWithHeaders(clientSocket, 10)
-            #
-            #     if id == 0:
-            #         #redPlayer = receivedMsg[1]
-            #         bluePlayer = receivedMsg[2]
-            #     elif id == 1:
-            #         redPlayer = receivedMsg[2]
-            #         #bluePlayer = receivedMsg[1]
         except:
             pass
 

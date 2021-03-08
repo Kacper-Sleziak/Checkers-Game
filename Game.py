@@ -8,25 +8,19 @@ import pygame
 
 class Game(GlobalFunctionality):
 
-    def __init__(self, window, gameMode):
+    def __init__(self, window):
         super().__init__()
         self.window = window
         self.round = "red"
         self.board = Board()
         self.choosenPawn = Pawn(69, 420, (21,3,7))
         self.listOfMoves = []
-        self.gameMode = gameMode
 
     def singleRound(self, currentPlayer, otherPlayer):
 
         priorityPawns = []
         running = True
         isPawnChoosed = False  # about mouse click
-        # redPlayer = Player((255, 0, 0))
-        # bluePlayer = Player((0, 0, 255))
-
-        # currentPlayer = redPlayer
-        # otherPlayer = bluePlayer
 
         while running:
             for event in pygame.event.get():
@@ -79,15 +73,6 @@ class Game(GlobalFunctionality):
                                 self.listOfMoves = currentPlayer.getListOfBeatings(self.choosenPawn, self.listOfMoves, otherPlayer.pawnList, self.board)
 
                         if isPawnChoosed == False and len(self.listOfMoves) == 0:
-                            # if self.round == "red":
-                            #     self.round = "blue"
-                            #     currentPlayer = bluePlayer
-                            #     otherPlayer = redPlayer
-                            # else:
-                            #     self.round = "red"
-                            #     currentPlayer = redPlayer
-                            #     otherPlayer = bluePlayer
-
                             self.listOfMoves.clear()
                             priorityPawns.clear()
                             self.gameUpdate(currentPlayer, otherPlayer)
