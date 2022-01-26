@@ -8,25 +8,19 @@ import pygame
 
 class Game(GlobalFunctionality):
 
-    def __init__(self, window, gameMode):
+    def __init__(self, window):
         super().__init__()
         self.window = window
         self.round = "red"
         self.board = Board()
         self.choosenPawn = Pawn(69, 420, (21,3,7))
         self.listOfMoves = []
-        self.gameMode = gameMode
 
-    def mainLoop(self):
+    def singleRound(self, currentPlayer, otherPlayer):
 
         priorityPawns = []
         running = True
         isPawnChoosed = False  # about mouse click
-        redPlayer = Player((255, 0, 0))
-        bluePlayer = Player((0, 0, 255))
-
-        currentPlayer = redPlayer
-        otherPlayer = bluePlayer
 
         while running:
             for event in pygame.event.get():
@@ -40,7 +34,7 @@ class Game(GlobalFunctionality):
                     if event.key == pygame.K_ESCAPE:
                         isPawnChoosed = False
                         self.listOfMoves.clear()
-                        self.gameUpdate(redPlayer, bluePlayer)
+                        self.gameUpdate(currentPlayer, otherPlayer)
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouseXPos, mouseYPos = pygame.mouse.get_pos()
@@ -72,31 +66,27 @@ class Game(GlobalFunctionality):
 
 
                         isPawnChoosed = currentPlayer.roundMovingPawn(mouseXPos, mouseYPos, self.listOfMoves, self.choosenPawn)
-                        self.gameUpdate(redPlayer, bluePlayer)
+                        self.gameUpdate(currentPlayer, otherPlayer)
                         if isPawnChoosed == False:
                             self.listOfMoves.clear()
                             if pawnKilledEnemy == 1:
                                 self.listOfMoves = currentPlayer.getListOfBeatings(self.choosenPawn, self.listOfMoves, otherPlayer.pawnList, self.board)
 
                         if isPawnChoosed == False and len(self.listOfMoves) == 0:
-                            if self.round == "red":
-                                self.round = "blue"
-                                currentPlayer = bluePlayer
-                                otherPlayer = redPlayer
-                            else:
-                                self.round = "red"
-                                currentPlayer = redPlayer
-                                otherPlayer = bluePlayer
-
                             self.listOfMoves.clear()
                             priorityPawns.clear()
+                            self.gameUpdate(currentPlayer, otherPlayer)
 
-                    print(len(currentPlayer.pawnList))
-                    if len(currentPlayer.pawnList) == 0:
-                        print(f"The end!")
-                        running = False
+                            if len(otherPlayer.pawnList) == 0:  ## warunek konca do poprawy - dodaj sytuacje kiedy nie ma mozliwosci ruchow
+                                print(f"The end!")
+                                return (False, currentPlayer, otherPlayer)
 
-            self.gameUpdate(redPlayer, bluePlayer)
+                            running = False
+                            return (True, currentPlayer, otherPlayer)
+
+
+
+            self.gameUpdate(currentPlayer, otherPlayer)
 
     def gameUpdate(self, redPlayer, bluePlayer):
         drawings = Drawings(self.window)

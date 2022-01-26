@@ -14,6 +14,7 @@ class Player(GlobalFunctionality):
         pawn = Pawn(coordinateX, coordinateY, self.__color)
         return pawn
 
+
     def __createPawnList(self):
         pawnList = []
 
@@ -31,9 +32,10 @@ class Player(GlobalFunctionality):
                     if i%2 != 0:
                         pawnList.append(self.__createPawn(50 + j * 200, 750 - i *100))
                     else:
-                        pawnList.append(self.__createPawn(150 + j * 200, 750 - i *100))            
+                        pawnList.append(self.__createPawn(150 + j * 200, 750 - i *100))
 
         return pawnList
+
 
     def __createSpecialRec(self):
         specialRecList = []
@@ -51,6 +53,7 @@ class Player(GlobalFunctionality):
 
         return specialRecList
 
+
     def roundChosingPawn(self, mouseXPos, mouseYPos, priorityPawns):
 
         if priorityPawns == []:
@@ -64,6 +67,7 @@ class Player(GlobalFunctionality):
 
         return False
 
+
     def roundMovingPawn(self, mouseXPos, mouseYPos, listOfMoves, choosenPawn):
         for pawn in self.pawnList:
             if pawn.coordinateX == choosenPawn.coordinateX and pawn.coordinateY == choosenPawn.coordinateY:
@@ -75,6 +79,7 @@ class Player(GlobalFunctionality):
                         return False
         return True
 
+
     def getListOfMoves(self, pawn, enemyPawnList, board):
 
         listOfPossibleMoves = []
@@ -85,6 +90,7 @@ class Player(GlobalFunctionality):
             listOfPossibleMoves = self.getListOfQueenMoves(pawn, enemyPawnList, board)
 
         return listOfPossibleMoves
+
 
     def getListOfPawnMoves(self, pawn, enemyPawnList, board):
         listOfPossibleMoves = []
@@ -111,6 +117,7 @@ class Player(GlobalFunctionality):
                 listOfPossibleMoves.remove(rectangle)
                 #rectangleToCheckX
         return listOfPossibleMoves
+
 
     def getListOfQueenMoves(self, pawn, enemyPawnList, board):
 
@@ -204,6 +211,7 @@ class Player(GlobalFunctionality):
 
         return listOfNearEnemyPawns
 
+
     def getListOfBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
 
         listOfBeatings = []
@@ -214,6 +222,7 @@ class Player(GlobalFunctionality):
             listOfBeatings = self.getListOfQueenBeatings(choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board)
 
         return listOfBeatings
+
 
     def getListOfPawnBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
         listOfBeatings = []
@@ -234,6 +243,7 @@ class Player(GlobalFunctionality):
                 listOfPossibleMoves = listOfBeatings
 
         return listOfPossibleMoves
+
 
     def getListOfQueenBeatings(self, choosenPawn, listOfPossibleMoves, listOfEnemyPawns, board):
 
@@ -264,11 +274,13 @@ class Player(GlobalFunctionality):
 
         return listOfPossibleBeatings
 
+
     def killPawn(self, x, y):
 
         for pawn in self.pawnList:
             if pawn.coordinateX == x and pawn.coordinateY == y:
                 self.pawnList.remove(pawn)
+
 
     def isPawnInList(self, x, y, pawnList):
         for pawn in pawnList:
